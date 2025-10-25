@@ -27,14 +27,15 @@ const py_build_plugin = () => {
   let ready = false;
 
   const syntaxCssPath = './assets/css/syntax.css';
-  if (!fs.existsSync(syntaxCssPath)) {
-    console.log('Syntax CSS not found. Generating...');
-    try {
-      execSync(`pygmentize -S ${process.env.PYGMENTIZE_THEME} -f html > ${syntaxCssPath}`);
-      console.log('Generated syntax.css');
-    } catch (e) {
-      console.error('Failed to generate syntax.css. Make sure "pygmentize" is installed and in your PATH.', e);
-    }
+  const syntaxCssDir = path.dirname(syntaxCssPath);
+  const syntaxTheme = process.env.PYGMENTIZE_THEME || 'native';
+  fs.mkdirSync(syntaxCssDir, { recursive: true });
+  try {
+    console.log(`Generating syntax.css with theme "${syntaxTheme}"...`);
+    execSync(`pygmentize -S ${syntaxTheme} -f html > ${syntaxCssPath}`);
+    console.log('Generated syntax.css');
+  } catch (e) {
+    console.error('Failed to generate syntax.css. Make sure "pygmentize" is installed and in your PATH.', e);
   }
 
   const handleExit = () => {
