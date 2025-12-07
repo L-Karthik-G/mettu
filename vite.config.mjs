@@ -130,21 +130,24 @@ const refreshPythonExecutable = () => {
 ensurePythonRequirements();
 runGenerateStyles();
 
+const handleExit = () => {
+  console.log('\nCleaning up build files...');
+  try {
+    const output = execSync(`${pythonExecutable} src/main.py --clean`);
+    console.log(output.toString().trim());
+  } catch (e) {
+    console.error("Cleanup script failed:", e);
+  }
+  process.exit();
+};
+
+// Ensure we only attach the listener once
+if (!process.listenerCount('SIGINT')) {
+  process.on('SIGINT', handleExit);
+}
+
 const py_build_plugin = () => {
   let ready = false;
-
-  const handleExit = () => {
-    console.log('\nCleaning up build files...');
-    try {
-      const output = execSync(`${pythonExecutable} src/main.py --clean`);
-      console.log(output.toString().trim());
-    } catch (e) {
-      console.error("Cleanup script failed:", e);
-    }
-    process.exit();
-  };
-
-  process.on('SIGINT', handleExit);
 
   return {
     name: 'builder-ssg',
@@ -190,15 +193,7 @@ const py_build_plugin = () => {
 
       build();
 
-      server.watcher.options = {
-        ignored: [
-          '**/assets/css/generated.daisyui.css',
-          '**/assets/css/generated.fonts.css',
-          '**/assets/css/syntax.css',
-          '**/.venv/**',
-          '**/dist/**'
-        ]
-      };
+      build();
 
       server.watcher.on('all', (event, filePath) => {
         if (!ready) {
@@ -239,4 +234,20 @@ export default defineConfig({
   build: {
     outDir: './dist',
   },
+  server: {
+    watch: {
+      ignored: [
+        '**/assets/css/generated.daisyui.css',
+        '**/assets/css/generated.fonts.css',
+        '**/assets/css/syntax.css',
+        '**/.venv/**',
+        '**/dist/**',
+        '**/index.html',
+        '**/sitemap.xml',
+        '**/blog/**',
+        '**/posts/**',
+        '**/tags/**'
+      ]
+    }
+  }
 });
