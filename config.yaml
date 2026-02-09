@@ -3,10 +3,11 @@ author: "you"
 base_url: "you.com"
 
 theme:
-  default: "hacktoberfest25"
+  default: "luxury"
   include:
     - "hacktoberfest25"
     - "dracula"
+    - "luxury"
   custom:
     hacktoberfest25: |
       /* Raw CSS Theme */
