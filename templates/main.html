@@ -7,12 +7,12 @@
       {% endif %}
 
       <div class="max-w-md">
-        <h1 class="text-6xl font-bold">Hello, I'm Laxmi Karthikeya Gollapudi </h1>
+        <h1 class="text-6xl font-bold">Hello, I'm Karthikeya </h1>
         <p class="mt-4 text-lg">It’s a pleasure to introduce myself.</p>
 
         <div class="mt-6 flex space-x-4">
             {% for link in page.social_links %}
-                <a href="{{ link.url }}" class="btn btn-ghost btn-square join-item" aria-label="{{ link.name }}">
+                <a href="https://github.com/L-Karthik-G?tab=repositories" class="btn btn-ghost btn-square join-item" aria-label="{{ link.name }}">
                     {# Dynamically include the SVG file based on the 'icon' key #}
                     {% if link.icon %}
                         {% include "icons/" + link.icon + ".svg" %}
@@ -23,7 +23,7 @@
         
         <div class="mt-8">
             <a href="/contact.html" class="btn btn-primary">Contact Me</a>
-            <a href="/resume.pdf" class="btn btn-outline ml-4">Download Resume</a>
+            <a href="/static/resume.pdf" class="btn btn-outline ml-4">Download Resume</a>
         </div>
       </div>
 
