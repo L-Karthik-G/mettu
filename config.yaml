@@ -3,11 +3,13 @@ author: "you"
 base_url: "you.com"
 
 theme:
-  default: "luxury"
+  default: "synthwave"
   include:
     - "hacktoberfest25"
     - "dracula"
     - "luxury"
+    - "synthwave"
+    - "smartlabs"
   custom:
     hacktoberfest25: |
       /* Raw CSS Theme */
