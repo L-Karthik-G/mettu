@@ -2,15 +2,15 @@
 
 {% block content %}
   <div class="hero rounded-lg">
-    <div class="hero-content flex-col lg:flex-row-reverse"> {% if page.hero_image %}
+    <!--<div class="hero-content flex-col lg:flex-row-reverse"> {% if page.hero_image %}
         <img src="assets/images/wePhoto.jpeg" class="ml-auto w-72 lg:max-w-m" style="margin-left: 100px;">
-      {% endif %}
+      {% endif %}-->
 
-      <div class="max-w-md mt-12">
+      <div class="max-w-md mt-32">
         <h1 class="text-8xl font-bold" >Hello, I'm Karthikeya </h1>
-        <p class="mt-4 text-2xl" style="margin-left: 5px;">It’s a pleasure to introduce myself.</p>
+        <p class="mt-4 text-2xl" style=margin-left:7px;>It’s a pleasure to introduce myself.</p>
 
-        <div class="lg:w-1/2 mt-6 flex space-x-4" >
+        <div class="mt-6 flex space-x-4">
             {% for link in page.social_links %}
                 <a href="https://github.com/L-Karthik-G?tab=repositories" class="btn btn-ghost btn-square join-item" aria-label="https://github.com/L-Karthik-G?tab=repositories.github">
                     {# Dynamically include the SVG file based on the 'icon' key #}
@@ -21,7 +21,7 @@
             {% endfor %}
         </div>
         
-        <div class="mt-8">
+        <div class="mt-8 flex justify-center gap-4">
             <a href="/contact.html" class="btn btn-primary">Contact Me</a>
             <a href="assets/docs/resume.pdf.pdf" class="btn btn-outline ml-4">Download Resume</a>
         </div>
