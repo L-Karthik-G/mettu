@@ -1,4 +1,4 @@
-site_name: "site"
+site_name: "Karthikeya's Website"
 author: "you"
 base_url: "you.com"
 
@@ -71,6 +71,7 @@ images:
   formats:
     - webp
     - jpg
+    - jpeg
 
 
 navigation:
