@@ -6,23 +6,24 @@
         <img src="assets/images/wePhoto.jpeg" class="ml-auto w-72 lg:max-w-m" style="margin-left: 100px;">
       {% endif %}-->
 
-      <div class="max-w-md mt-32">
-        <h1 class="text-8xl font-bold" >Hello, I'm Karthikeya </h1>
+      <div class="max-w-6xl mx-auto px-4 mt-24 md:mt-32">
+        <h1 class="text-8xl font-bold" >Hello,<br> I'm Karthikeya </h1>
         <p class="mt-4 text-2xl" style=margin-left:7px;>It’s a pleasure to introduce myself.</p>
 
         <div class="mt-6 flex space-x-4">
             {% for link in page.social_links %}
-                <a href="https://github.com/L-Karthik-G?tab=repositories" class="btn btn-ghost btn-square join-item" aria-label="https://github.com/L-Karthik-G?tab=repositories.github">
+                <a href="{{ link.url }}" class="btn btn-ghost btn-square join-item" aria-label="{{ link.name }}">
                     {# Dynamically include the SVG file based on the 'icon' key #}
                     {% if link.icon %}
-                        {% include "icons/" + link.icon + ".svg" %}
+                      {% include "icons/" ~ link.icon ~ ".svg" ignore missing %}
                     {% endif %}
+
                 </a>
             {% endfor %}
         </div>
         
         <div class="mt-8 flex justify-center gap-4">
-            <a href="/contact.html" class="btn btn-primary">Contact Me</a>
+            <a href="https://www.instagram.com/_golla_0?igsh=b2V5cjFqNDRtMnB1&utm_source=qr" class="btn btn-primary">Instagram</a>
             <a href="assets/docs/resume.pdf.pdf" class="btn btn-outline ml-4">Download Resume</a>
         </div>
       </div>
@@ -30,6 +31,58 @@
     </div>
   </div>
 
+<!--<div class="flex justify-center mt-32 animate-bounce">
+  <a href="#projects" aria-label="Scroll to Projects" class="text-primary opacity-60 hover:opacity-100 transition-opacity">
+    <div class="w-15 h-15">
+      {% include "icons/arrow-down.svg" ignore missing %}
+    </div>
+  </a>
+</div>-->
 
+<div id="projects" class="w-full px-4 mt-64 mb-32">
   
+  <div class="flex items-center gap-6 mb-12">
+    <h2 class="text-4xl font-bold whitespace-nowrap">Check These out!</h2>
+    
+    <div class="h-px bg-current opacity-20 flex-grow"></div>
+  </div>
+
+  </div>
+
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+    
+    <div class="card bg-black/5 backdrop-blur-sm border border-black/10 shadow-xl hover:-translate-y-2 transition-all duration-300">
+      <div class="card-body">
+        <h3 class="card-title text-2xl">MAKE-RB</h3>
+        <p class="text-base-content/70">Developed a Kivy mobile app using Firebase and a mobile device's internal accelerometerand gyroscope to detect road anomalies in real-time. Implemented threshold-filtering to accurately distinguish potholes from normal driving vibrations.</p>
+        <div class="card-actions justify-end mt-4">
+          <div class="badge badge-outline">KIVY</div>
+          <div class="badge badge-outline">FIREBASE API</div>
+          <div class="badge badge-outline">IOT</div>
+        </div>
+        <div class="mt-4">
+          <a href="https://github.com/L-Karthik-G/Make-RB" class="link link-primary font-semibold">View on GitHub →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card bg-black/5 backdrop-blur-sm border border-black/10 shadow-xl hover:-translate-y-2 transition-all duration-300">
+      <div class="card-body">
+        <h3 class="card-title text-2xl">RPS-GO</h3>
+        <p class="text-base-content/70">Multiplayer Rock Paper Scissors Game using YOLOv8 for real-time gesture recognition and OpenCV for precise scoring. Features automated hand localization to enhance gameplay accuracy and user experience.</p>
+        <div class="card-actions justify-end mt-4">
+          <div class="badge badge-outline">YOLOv8,</div>
+          <div class="badge badge-outline">OpenCV</div>
+          <div class="badge badge-outline">PYTHON</div>
+          <div class="badge badge-outline">Real-Time Computer Vission</div>
+        </div>
+        <div class="mt-4">
+          <a href="https://github.com/L-Karthik-G/RPSGO" class="link link-primary font-semibold">View on GitHub →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
 {% endblock %}

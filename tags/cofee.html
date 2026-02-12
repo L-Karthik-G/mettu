@@ -1,12 +1,11 @@
-{% set active_theme = page.theme if page.theme is defined else (site.theme.default if site.theme is defined and
-site.theme.default is defined else (site.theme if site.theme is defined else "dracula")) %}
+
 <!DOCTYPE html>
-<html lang="en" data-theme="{{ active_theme }}">
+<html lang="en" data-theme="synthwave">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ page.title }} | {{ site.site_name }}</title>
+  <title>Tag: cofee | Karthik's Corner</title>
   <link rel="stylesheet" href="/assets/css/main.css">
   <link rel="stylesheet" href="/assets/css/syntax.css">
 
@@ -28,20 +27,40 @@ site.theme.default is defined else (site.theme if site.theme is defined else "dr
 <body class="min-h-screen flex flex-col overflow-x-hidden">
   <div class="navbar bg-transparent fixed top-0 left-0 z-50 backdrop-blur-md">
     <div class="flex-1">
-      <a href="/" class="btn btn-ghost text-xl">{{ site.site_name }}</a>
+      <a href="/" class="btn btn-ghost text-xl">Karthik's Corner</a>
     </div>
     <div class="flex-none">
       <ul class="menu menu-horizontal px-1">
-        {% for item in site.navigation %}
-        <li><a href="{{ item.url }}">{{ item.name }}</a></li>
-        {% endfor %}
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/blog/">Blog</a></li>
+        
       </ul>
     </div>
   </div>
 
 <div id="vanta-bg" class="fixed inset-0 -z-10 pointer-events-none"></div>
   <main class="container mx-auto p-8 pt-32 relative z-10 flex-1">
-    {% block content %}{% endblock %}
+    
+    <h1 class="text-3xl font-bold">Posts tagged with: #cofee</h1>
+    <div class="divider"></div>
+
+    <div class="space-y-8 mt-8">
+    
+        <div class="card bg-base-200 shadow-xl">
+            <div class="card-body">
+                <h2 class="card-title"><a href="/posts/test/">this is a test</a></h2>
+                <p>Published on: 2026-02-17</p>
+            </div>
+        </div>
+    
+    </div>
+
+    <div class="mt-8">
+        <a href="/blog/" class="link">← Back to all posts</a>
+    </div>
+
   </main>
 
 
