@@ -18,7 +18,7 @@ social_links:
       url: "https://www.instagram.com/_golla_0?igsh=b2V5cjFqNDRtMnB1&utm_source=qr"
       icon: "instagram"
     - name: "resume"
-      url: "assets/docs/resume.pdf.pdf"
+      url: "assets/docs/resume.pdf"
       icon: "resume"
       
 
