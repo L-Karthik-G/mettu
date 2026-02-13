@@ -14,5 +14,12 @@ social_links:
     - name: "Medium"
       url: "https://medium.com/@glkarthik27"
       icon: "medium"
+    - name: "Instagram"
+      url: "https://www.instagram.com/_golla_0?igsh=b2V5cjFqNDRtMnB1&utm_source=qr"
+      icon: "instagram"
+    - name: "resume"
+      url: "assets/docs/resume.pdf.pdf"
+      icon: "resume"
+      
 
 ---
