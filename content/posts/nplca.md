@@ -1,10 +1,10 @@
 ---
-title: "NLPCA"
+title: "A Comparission between PCA and NLPCA"
 date: "2025-07-30"
 layout: "post"
 tags:
-    - "introduction"
-    - "demo"
+    - "AI"
+    - "ML"
 ---
 # Understanding PCA and Nonlinear PCA
 
@@ -21,7 +21,7 @@ The paper essentially compares traditional PCA with a bottleneck-based neural ne
 Principal Component Analysis (PCA) is a method used to reduce
 dimensionality.
 
-Dimensionality simply refers to how many independent variables describe your data.
+Dimensionality simply refers to how many variables describe your data.
 For example, suppose we want to build a model to classify vehicles.
 Possible variables might include:
 
@@ -75,7 +75,12 @@ A v = \lambda v
 
 which is why eigenvectors are central to PCA.
 
-<!--![PCA Mapping](../../../assets/for_blogs/pca_2d_mapping.gif)-->
+<div class="gif-container">
+  <img src="/assets/for_blogs/pca_2d_mapping.gif" alt="PCA Mapping">
+  <p style="text-align: center; font-style: italic; margin-top: 10px;">
+  finding best-fit line<p>
+</div>
+
 ---
 
 
