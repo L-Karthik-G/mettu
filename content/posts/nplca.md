@@ -1,12 +1,11 @@
 ---
 title: "A Comparission between PCA and NLPCA"
-date: "2025-07-30"
+date: "2026-02-15"
 layout: "post"
 tags:
-    - "AI"
-    - "ML"
+    - "Deep Learning"
+    - "Machine Learning"
 ---
-# Understanding PCA and Nonlinear PCA
 
 Recently, I found myself working with a team from my college to participate in a research paper comparing regularization mechanisms in latent variable models.
  While reading around the topic, I was recommended the paper
@@ -33,7 +32,7 @@ Possible variables might include:
 
 Not all of these variables are equally important. To distinguish a bus from a car, size and number of wheels are far more informative than colour or year of manufacture.
 
-When we mentally ignore less important variables and focus only on the most informative ones, we are effectively performing dimensionality reduction.
+When we mentally ignore less important variables and focus only on the most informative ones, we are effectively performing dimensional reduction.
 
 That is what PCA does but mathematically and optimally.
 
@@ -74,12 +73,6 @@ A v = \lambda v
 \]$$
 
 which is why eigenvectors are central to PCA.
-
-<div class="gif-container">
-  <img src="/assets/for_blogs/pca_2d_mapping.gif" alt="PCA Mapping">
-  <p style="text-align: center; font-style: italic; margin-top: 10px;">
-  finding best-fit line<p>
-</div>
 
 ---
 
@@ -128,8 +121,8 @@ $$
 \mathbf{E} = \mathbf{Y} - \mathbf{Y}'
 $$
 
-The smaller the feature dimension $f$, the larger the residual norm
-$\|\mathbf{E}\|$.
+The smaller the feature dimension $f$ the larger the residual norm
+$\|\mathbf{E}\|.$
 
 To understand this, we can imagine a 2D plot of linearly scattered data. The points roughly lie along a slanted direction.
 
@@ -138,6 +131,12 @@ PCA computes the eigenvectors of the covariance matrix and identifies the direct
 We can then draw a best-fit line along this principal direction.
 
 Instead of representing each point using two coordinates (x, y), we project each point onto this principal axis. Now, to represent a data point, we only need its coordinate along this eigenvector direction.
+
+<div class="gif-container">
+  <img src="/assets/for_blogs/pca_2d_mapping.gif" alt="PCA Mapping">
+  <p style="text-align: center; font-style: italic; margin-top: 10px;">
+  A 2D representation of PCA<p>
+</div>
 
 In other words:
 
@@ -197,6 +196,9 @@ $$
 But optimization is now performed using gradient descent instead of
 eigen decomposition.
 
+![nlpca representation](../../assets/for_blogs/nlpca_pic.png)
+
+
 ------------------------------------------------------------------------
 
 ## Why the Bottleneck Matters
@@ -213,18 +215,26 @@ This compression acts as an implicit form of regularization.
 
 ## Conclusion
 
-In many ways, Nonlinear PCA is not merely an extension of PCA — it represents a shift in mindset.
+<div class="image-container">
+  <img src="../../assets/for_blogs/pca_vs_npca.png" alt="PCA vs NLPCA">
+  <p style="text-align: center; font-style: italic; margin-top: 10px;">
+    Result of our trained model
+  </p>
+  <p style="text-align: center; font-style: italic; margin-top: 10px;">
+    PCA draws a line(linear representation) thorugh the circle wheras NLPCA reconstructs the orginal data(non-linear representation)
+  </p>
+</div>
+             
+---
 
-PCA is elegant, stable, and mathematically beautiful. It provides a closed-form solution and low variance, but at the cost of strong assumptions. It assumes the structure of data can be captured by straight lines and flat hyperplanes.
+## Conclusion
 
-NLPCA, on the other hand, relaxes this rigidity. By introducing nonlinearity and learning through a bottleneck architecture, it allows models to capture curved manifolds and complex structures that better resemble real-world data.
+PCA and NLPCA solve the same problem — dimensionality reduction — but with different tools and trade-offs.
 
-But this flexibility comes with trade-offs: increased computational
-complexity, optimization challenges, and higher variance.
+PCA uses eigendecomposition to find a linear subspace that maximizes variance. It's fast, deterministic, and mathematically elegant. The solution is always the same for a given dataset. But PCA is fundamentally limited: it can only model flat, linear structures. When data lies on a curved manifold, like a circle or spiral PCA's straight-line projection fails to capture the underlying geometry.
 
-Ultimately, the comparison between PCA and NLPCA reflects a deeper theme in machine learning, the balance between simplicity and expressiveness, bias and flexibility, structure and freedom.
+NLPCA addresses this limitation by using neural networks with nonlinear activation functions. Through a bottleneck autoencoder architecture, it can learn curved manifolds that better represent complex data structures. However, this flexibility comes at a cost: optimization through gradient descent is slower, solutions depend on initialization, and the model is more prone to overfitting.
 
-PCA reduces dimensions.
+The practical takeaway: **use PCA when your data is approximately linear** — it's faster, more stable, and easier to interpret. **Use NLPCA when the underlying structure is curved or complex** — when reconstruction error with PCA remains high despite using many components.
 
-NLPCA reduces assumptions.
-
+All in all  PCA assumes linearity and optimizes within that constraint. NLPCA learns the structure directly, trading simplicity for expressiveness.

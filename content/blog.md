@@ -1,4 +1,4 @@
 ---
-title: "My Blog"
-layout: "blog"
+title: "My Rabit Hole"
+layout: "blogs"
 ---
