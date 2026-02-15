@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="max-w-[70ch] mx-auto">
+<div class="max-w-4xl mx-auto">
 
   <div class="bg-black/25 
               backdrop-blur-sm
@@ -20,6 +20,21 @@
 
 
         <header>
+
+            <script>
+            window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+            };
+            </script>
+
+            <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+
             <h1 class="mb-3 text-3xl md:text-4xl font-semibold tracking-tight text-white">
                 {{ page.title }}
             </h1>
