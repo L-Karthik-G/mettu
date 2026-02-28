@@ -94,7 +94,9 @@ where:
 - $\mathbf{P}$ contains the loadings  
 - $\mathbf{E}$ is the residual matrix  
 - $f$ is the number of retained factors ($f < m$)
+the technical terms and math behind latent space, what is it exactly?
 
+Let us understand it through an annology. Imagine you
 The optimality condition is that the Euclidean norm of the residual
 matrix $\mathbf{E}$ is minimized for a given number of factors.
 
@@ -163,6 +165,17 @@ This structural rigidity is what we refer to as high bias.
 PCA assumes the world is flat.
 
 ------------------------------------------------------------------------
+
+## Latent Space
+Before we get into NLPCA and Latent space let'd first understand what a latent space actually is.
+
+ Let us understand with an analogy.
+ 
+Imagine you just woke up and opened the curtains to look outside. You notice that the ground is wet, the wind feels cold,there is water on the leaves of trees and the overall mood seems gloomy. From these observations, you can infer that, *'It has rained!'* You never actually saw the rain, but from the available evidence, you concluded that it must have happened. Each time you encounter a similar scene, you would likely make the same inference.
+
+This is similar to how latent space works. It captures underlying factors from the data and uses them to form internal representations. The model does not directly observe the hidden cause, but it learns to infer it from the patterns present in the dataset.
+
+---
 
 ## Enter Nonlinear PCA (NLPCA)
 
