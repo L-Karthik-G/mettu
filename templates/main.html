@@ -80,9 +80,7 @@
   const API_KEY = "e8f9905c3a764d7a9518cf1c264573a1";
   const baseUrl = "https://api.football-data.org/v4/teams/81/matches";
 
-  fetch("https://corsproxy.io/?" + encodeURIComponent(`${baseUrl}?status=FINISHED&limit=1`), {
-    headers: { "X-Auth-Token": API_KEY }
-  })
+  fetch("/api/barca?status=FINISHED")
   .then(res => res.json())
   .then(data => {
     const match = data.matches[0];
@@ -104,9 +102,7 @@
 
   let nextMatchDate;
 
-  fetch("https://corsproxy.io/?" + encodeURIComponent(`${baseUrl}?status=SCHEDULED&limit=1`), {
-    headers: { "X-Auth-Token": API_KEY }
-  })
+  fetch("/api/barca?status=SCHEDULED")
   .then(res => res.json())
   .then(data => {
     const match = data.matches[0];
