@@ -8,45 +8,48 @@ tags:
 ---
 ## 1.Introduction
 
-On my journey to understand deep learning and regularization models, it only felt natural to explore Variational Autoencoders after working on Nonlinear PCA [Click here to learn more](/posts/nplca/).
-
+On my journey to understand deep learning and regularization models, it only felt natural to explore Variational Autoencoders after working on Nonlinear PCA.[Click here to learn more](/posts/nplca/).
+Variational Autoencoders are a form of Autoencoders which use probabilistic aproach on learning data and use a continous latent space. 
 Structurally, a VAE looks almost identical to a standard Autoencoder. We still have:
 Encoder --> Latent space --> Decoder
 But conceptually, the difference is huge.
 
 A regular Autoencoder is **deterministic**. Given a data point 𝑥 it determines a unique latent representation 𝑧 for that input. The mapping is fixed, so the same input will always produce the same latent vector.
 
-In contrast, a Variational Autoencoder is **probabilistic**. Given a data point 𝑥, it determines a distribution over the latent space that is most likely to represent the data. Instead of committing to a single latent vector, it models a range of plausible representations from which z can be sampled.
+In contrast, a Variational Autoencoder is **probabilistic**. Given a data point 𝑥, it determines a distribution over the latent space that is most likely to represent the data. Instead of committing to a single latent vector, it models a range of plausible representations from which z can be sampled and chooses from there accordingly
 
 ---
 ## 2.Defining the terms
-before we getting into the nuiance of teh math,lets define some terms which we will se thorughout this blog
+Before we getting into the nuance of the math, lets define some terms which we will se throughout this blog
 
 let's take:
-- x as datapoint in the data 
-- z as variable from the latent space 
+- **x as datapoint in the data** 
+- **z as variable from the latent space** 
 
 **note: all *p()* terms indiacte probablities**
 
 2.1 **p(z)**
-This is called the *prior*. It represents our initial assumption of how the latent space is distributed, before observing any data.
+This is called the *prior*. It represents our *initial assumption *of how the latent space is distributed, before observing any data.
 It encodes what we belive the latent space to look like indpendent of any particular input. It is a structural assumption that keeps the model *well-behaved*.
 
 2.2 **p(x/z)**
 This represents the probablity of seeing a given data point x for a specifc variable z in the latent space.
-In practice, the decoder tries to reconstruct x from z, and this probabilty tells us how accurate the reconstruction is
+In practice, the decoder tries to reconstruct x from z, and this probabilty tells us how *accurate the reconstruction* is
 
 2.3 **p(z/x)**
-This represnts the *true posterior* . It shows, for a given data point x, what latent representaion could have generated it
-This is the quantity we idealy want to compute,but in practice it is very complicated to do that.
+This represents the *true posterior* . It shows, for a given data point x, what latent representation could have generated it
+This is the quantity we idealy want to compute, but in practice it is very complicated to do that.
 
-2.3.1.*INTRACTABILITY of p(x)*
+2.3.1 **p(x) and its Intractablility**
 $$
 \[
 p(x) = \int p(x \mid z)\, p(z)\, dz
 \]
 $$
-This expression gives the marginal likelihood of a data point. However, this integral is *intractable*. an Intractable integral is on where there is no closed form solution once p(x/z) is modeled by a neural network, and evaluating it exactly would require integrating over infinitely many possible latent variables.
+This expression gives the marginal likelihood of a data point *or*
+It tells us how likely the model thinks the observed data is, after considering all possible latent variables that could have generated it.
+
+However, this integral is *intractable*. an Intractable integral is on where there is no closed form solution once p(x/z) is modeled by a neural network, and evaluating it exactly would require integrating over infinitely many possible latent variables.
 $$
 \[
 p(z \mid x) = \frac{p(x \mid z)\, p(z)}{p(x)}

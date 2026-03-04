@@ -1,0 +1,315 @@
+
+<!DOCTYPE html>
+<html lang="en" data-theme="synthwave">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home | Karthik's Corner</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/syntax.css">
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+
+  <!-- Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
+  <!-- Vanta NET effect -->
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+
+  
+</head>
+
+<body class="min-h-screen flex flex-col overflow-x-hidden">
+  <div class="navbar bg-transparent fixed top-0 left-0 z-50 backdrop-blur-md">
+    <div class="flex-1">
+      <a href="/" class="btn btn-ghost text-xl">Karthik's Corner</a>
+    </div>
+    <div class="flex-none">
+      <ul class="menu menu-horizontal px-1">
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/blog/">Blog</a></li>
+        
+      </ul>
+    </div>
+  </div>
+
+<div id="vanta-bg" class="fixed inset-0 w-full h-full -z-10 pointer-events-none"></div>
+
+<main class="relative z-10 min-h-screen container mx-auto p-8 pt-32">
+    
+<div class="flex flex-col min-h-screen">
+
+  <div class="h-[85vh] flex flex-col items-center justify-center px-4 -mt-10">
+    
+    <div class="flex flex-col items-start w-fit">
+      
+      <h1 class="text-7xl md:text-8xl font-bold leading-tight">
+        Hello,<br> I'm Karthik Gollapudi
+      </h1>
+      <p class="mt-4 text-2xl opacity-90">
+        I'm a first year Btech student, it's a pleasure to introduce myself.
+      </p>
+
+      <div class="mt-10 flex flex-wrap items-center justify-start gap-6">
+        <div class="flex items-center space-x-4">
+          
+          <a href="https://github.com/L-Karthik-G" class="group" aria-label="GitHub">
+            <div class="p-3 rounded-xl bg-black/10 backdrop-blur-sm border border-white/10 shadow-xl 
+                        group-hover:-translate-y-2 transition-all duration-300">
+              
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+              
+            </div>
+          </a>
+          
+          <a href="https://www.linkedin.com/in/karthik-gollapudi-18006b2b7/" class="group" aria-label="LinkedIn">
+            <div class="p-3 rounded-xl bg-black/10 backdrop-blur-sm border border-white/10 shadow-xl 
+                        group-hover:-translate-y-2 transition-all duration-300">
+              
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+              
+            </div>
+          </a>
+          
+          <a href="mailto:lkarthikgollapudi@gmail.com?subject=Contact%20me%20here" class="group" aria-label="gmail">
+            <div class="p-3 rounded-xl bg-black/10 backdrop-blur-sm border border-white/10 shadow-xl 
+                        group-hover:-translate-y-2 transition-all duration-300">
+              
+                <svg width="24px" fill ="currentcolor" height="24px" viewBox="0 0 24 24" role="img" xmlns="http://www.w3.org/2000/svg"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
+              
+            </div>
+          </a>
+          
+          <a href="https://docs.google.com/document/d/e/2PACX-1vRdcSGzxrXrTN8VUF-Y2CyRyQMsIukvn8woca2qvozy_-EGq5atpv7RBIKUNjWXyQ/pub" class="group" aria-label="resume">
+            <div class="p-3 rounded-xl bg-black/10 backdrop-blur-sm border border-white/10 shadow-xl 
+                        group-hover:-translate-y-2 transition-all duration-300">
+              
+                <svg xmlns="http://www.w3.org/2000/svg" 
+     viewBox="0 0 1024 1024" 
+     fill="currentColor" 
+     border ="3"
+     class="w-7 h-7">
+     
+  <path d="M334.336 616.3456c0 11.5712 9.5232 21.0944 21.0944 21.0944h315.4944c11.5712 0 21.0944-9.5232 21.0944-21.0944s-9.5232-21.0944-21.0944-21.0944H355.4304c-11.6736 0-21.0944 9.5232-21.0944 21.0944zM670.9248 702.0544H355.4304c-11.5712 0-21.0944 9.5232-21.0944 21.0944s9.5232 21.0944 21.0944 21.0944h315.4944c11.5712 0 21.0944-9.5232 21.0944-21.0944s-9.5232-21.0944-21.0944-21.0944z" />
+  <path d="M586.9568 165.888H272.4864c-23.2448 0-42.1888 18.944-42.1888 42.1888v607.8464c0 23.2448 18.944 42.1888 42.1888 42.1888H751.616c23.2448 0 42.1888-18.944 42.1888-42.1888V372.736l-206.848-206.848z m27.4432 87.1424l97.1776 97.1776h-89.9072c-3.8912 0-7.2704-3.3792-7.2704-7.2704v-89.9072z m137.1136 562.7904s0 0.1024 0 0l-479.0272 0.1024s-0.1024 0-0.1024-0.1024V208.1792s0-0.1024 0.1024-0.1024h297.984l1.6384 1.6384v133.12c0 27.2384 22.3232 49.4592 49.4592 49.4592h129.9456v423.5264z" />
+  <path d="M428.8512 388.7104c37.1712 0 67.2768-30.1056 67.2768-67.2768 0-37.1712-30.1056-67.2768-67.2768-67.2768S361.472 284.16 361.472 321.4336c0 37.1712 30.1056 67.2768 67.3792 67.2768z m0-97.6896c16.7936 0 30.4128 13.6192 30.4128 30.4128s-13.6192 30.4128-30.4128 30.4128-30.4128-13.6192-30.4128-30.4128 13.6192-30.4128 30.4128-30.4128zM355.4304 504.7296c11.6736 0 21.0944-9.4208 21.0944-21.0944 0-22.8352 23.9616-42.1888 52.3264-42.1888s52.3264 19.2512 52.3264 42.1888c0 11.6736 9.4208 21.0944 21.0944 21.0944s21.0944-9.4208 21.0944-21.0944c0-46.4896-42.3936-84.3776-94.5152-84.3776s-94.5152 37.888-94.5152 84.3776c0 11.6736 9.4208 21.0944 21.0944 21.0944z" />
+</svg>
+              
+            </div>
+          </a>
+          
+        </div>
+      </div>
+    </div> 
+
+    <div class="mt-12 animate-bounce opacity-40">
+       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M7 13l5 5 5-5M12 18V6" />
+</svg>
+    </div>
+  </div>
+
+  <div id="projects" class="w-full px-8 md:px-24 mb-32">
+    
+    <div class="flex items-center gap-6 mb-12">
+      <h2 class="text-4xl font-bold whitespace-nowrap">Check These Out!</h2>
+      <div class="h-px bg-current opacity-20 flex-grow"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+      
+      <div class="card bg-black/3 backdrop-blur-sm border border-white/10 shadow-xl hover:-translate-y-2 transition-all duration-300">
+        <div class="card-body">
+          <h3 class="card-title text-2xl font-bold">MAKE-RB</h3>
+          <p class="text-base-content/70">Developed a Kivy mobile app using Firebase and internal sensors to detect road anomalies in real-time.</p>
+          <div class="card-actions justify-end mt-4">
+            <div class="badge badge-outline">KIVY</div>
+            <div class="badge badge-outline">FIREBASE</div>
+            <div class="badge badge-outline">IOT</div>
+          </div>
+          <div class="mt-4">
+            <a href="https://github.com/L-Karthik-G/Make-RB" class="link link-primary font-semibold">View on GitHub →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-black/3 backdrop-blur-sm border border-white/10 shadow-xl hover:-translate-y-2 transition-all duration-300">
+        <div class="card-body">
+          <h3 class="card-title text-2xl font-bold">RPS-GO</h3>
+          <p class="text-base-content/70">Multiplayer Rock Paper Scissors Game using YOLOv8 for gesture recognition and OpenCV for scoring.</p>
+          <div class="card-actions justify-end mt-4">
+            <div class="badge badge-outline">YOLO.V8</div>
+            <div class="badge badge-outline">OPENCV</div>
+            <div class="badge badge-outline">PYTHON</div>
+          </div>
+          <div class="mt-4">
+            <a href="https://github.com/L-Karthik-G/RPSGO" class="link link-primary font-semibold">View on GitHub →</a>
+          </div>
+        </div>
+      </div>
+      
+<!-- =====================================================================
+  DROP THIS TILE inside your grid div, alongside your existing cards.
+  
+  HOW IT WORKS:
+    1. On page load, JS fetches your RSS feed to get the latest post date.
+    2. If today is within 10 days of that date, the tile appears.
+    3. After 10 days it silently stays hidden — no code changes needed.
+
+  YOU ONLY NEED TO CHANGE:
+    - RSS_FEED_URL  → path to your blog's RSS/Atom feed
+    - BLOG_PAGE_URL → path to your blog page
+  ===================================================================== -->
+
+<div
+  id="blog-tile"
+  class="hidden card bg-black/3 backdrop-blur-sm border border-white/10 shadow-xl
+         hover:-translate-y-2 transition-all duration-300 relative overflow-hidden"
+>
+  <!-- Subtle animated glow strip across the top -->
+  <div
+    class="absolute top-0 left-0 w-full h-[2px]
+           bg-gradient-to-r from-transparent via-primary to-transparent
+           animate-[shimmer_2.5s_ease-in-out_infinite]"
+  ></div>
+
+  <div class="card-body">
+
+    <!-- Header row: title + NEW badge -->
+    <div class="flex items-center gap-3">
+      <h3 class="card-title text-2xl font-bold">Latest Blog Post</h3>
+      <span
+        class="badge badge-primary badge-sm font-bold tracking-widest uppercase
+               animate-pulse shadow-md shadow-primary/40"
+      >New</span>
+    </div>
+
+    <!-- Populated by JS -->
+    <p id="blog-tile-title" class="text-base-content/70 text-base mt-1">
+      Loading…
+    </p>
+
+    <!-- Days-ago pill, populated by JS -->
+    <p id="blog-tile-meta" class="text-xs text-base-content/40 mt-1"></p>
+
+    <div class="card-actions justify-end mt-4">
+      <div class="badge badge-outline">BLOG</div>
+      <div class="badge badge-outline">NEW</div>
+    </div>
+
+    <div class="mt-4">
+      <a id="blog-tile-link" href="/blog" class="link link-primary font-semibold">
+        Read the Post →
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ─── keyframe for the shimmer strip (add once to your global CSS if preferred) -->
+<style>
+  @keyframes shimmer {
+    0%   { transform: translateX(-100%); }
+    50%  { transform: translateX(100%);  }
+    100% { transform: translateX(-100%); }
+  }
+</style>
+
+<script>
+(async () => {
+  /* ── CONFIG ────────────────────────────────────────────────── */
+  const RSS_FEED_URL  = "/blog/rss.xml";   // ← your feed path
+  const BLOG_PAGE_URL = "/blog";           // ← your blog page
+  const WINDOW_DAYS   = 10;
+  /* ─────────────────────────────────────────────────────────── */
+
+  const tile = document.getElementById("blog-tile");
+
+  try {
+    const res  = await fetch(RSS_FEED_URL);
+    if (!res.ok) throw new Error("Feed not found");
+
+    const text   = await res.text();
+    const xml    = new DOMParser().parseFromString(text, "application/xml");
+
+    // Works for both RSS <item> and Atom <entry>
+    const item   = xml.querySelector("item, entry");
+    if (!item) throw new Error("No posts in feed");
+
+    // RSS uses <pubDate>, Atom uses <published> or <updated>
+    const dateStr =
+      item.querySelector("pubDate")?.textContent  ||
+      item.querySelector("published")?.textContent ||
+      item.querySelector("updated")?.textContent;
+
+    const postTitle =
+      item.querySelector("title")?.textContent || "New post";
+
+    const postUrl =
+      item.querySelector("link")?.textContent  ||
+      item.querySelector("link")?.getAttribute("href") ||
+      BLOG_PAGE_URL;
+
+    if (!dateStr) throw new Error("No date found");
+
+    const postDate = new Date(dateStr);
+    const now      = new Date();
+    const diffDays = Math.floor((now - postDate) / (1000 * 60 * 60 * 24));
+
+    if (diffDays >= 0 && diffDays < WINDOW_DAYS) {
+      // Populate dynamic content
+      document.getElementById("blog-tile-title").textContent = postTitle;
+      document.getElementById("blog-tile-meta").textContent  =
+        diffDays === 0 ? "Posted today!" : `Posted ${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+      document.getElementById("blog-tile-link").href = postUrl;
+
+      tile.classList.remove("hidden");
+    }
+  } catch (err) {
+    // Feed unavailable or expired — tile stays hidden, no console noise
+    console.debug("[blog-tile]", err.message);
+  }
+})();
+</script>
+
+    </div>
+  </div>
+</div>
+
+    
+</main>
+
+  <!-- Vanta INIT (must be after content exists) -->
+  <script>
+window.addEventListener('DOMContentLoaded', () => {
+  VANTA.NET({
+    el: "#vanta-bg",
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    minHeight: 200.0,
+    minWidth: 200.0,
+    scale: 1.0,
+    scaleMobile: 1.0,
+    color: 0x3f83f8,
+    // Change this to match your dark navy background (e.g., 0x05051e)
+    backgroundColor: 0x05051e, 
+    points: 10.0,
+    maxDistance: 20.0,
+    spacing: 15.0
+  })
+})
+  </script> 
+
+  <!--sum stuff to comit
+   -->
+
+</body>
+</html>
