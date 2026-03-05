@@ -29,10 +29,6 @@ const loadSiteConfig = () => {
   }
 };
 
-
-// Image processing moved to defineConfig
-
-
 if (!fs.existsSync(inputDir)) {
   fs.mkdirSync(inputDir, { recursive: true });
 }
@@ -44,8 +40,6 @@ const sanitizeExecutable = (value) => {
   return value.trim();
 };
 
-// function moved up
-
 const resolvePythonExecutable = () => {
   const envOverride = sanitizeExecutable(process.env.PY_EXECUTABLE);
   if (envOverride) {
@@ -54,14 +48,13 @@ const resolvePythonExecutable = () => {
 
   const venvPythonBin = path.join(__dirname, '.venv/bin/python');
   const venvPythonScripts = path.join(__dirname, '.venv/Scripts/python.exe');
-  
+
   if (process.platform === 'win32') {
     if (fs.existsSync(venvPythonScripts)) return venvPythonScripts;
   } else {
     if (fs.existsSync(venvPythonBin)) return venvPythonBin;
   }
-  
-  // Fallback check regardless of platform prediction (e.g. mingw/cygwin)
+
   if (fs.existsSync(venvPythonBin)) return venvPythonBin;
   if (fs.existsSync(venvPythonScripts)) return venvPythonScripts;
 
@@ -92,8 +85,8 @@ console.log(`[config] Using Python executable: ${pythonExecutable}`);
 const ensurePythonRequirements = () => {
   const venvPath = path.join(__dirname, '.venv');
   const isWindows = process.platform === 'win32';
-  
-  const venvPython = isWindows 
+
+  const venvPython = isWindows
     ? path.join(venvPath, 'Scripts', 'python.exe')
     : path.join(venvPath, 'bin', 'python');
 
@@ -114,7 +107,6 @@ const ensurePythonRequirements = () => {
 
   try {
     console.log('Installing python dependencies...');
-
     execSync(`"${venvPip}" install -r "${requirementsPath}"`, { stdio: 'inherit' });
   } catch (e) {
     console.error('Failed to install Python dependencies.', e);
@@ -145,8 +137,11 @@ const refreshPythonExecutable = () => {
   return pythonExecutable;
 };
 
-ensurePythonRequirements();
-runGenerateStyles();
+// Skip venv setup on Vercel since we use pip3 directly
+if (!process.env.VERCEL) {
+  ensurePythonRequirements();
+  runGenerateStyles();
+}
 
 const handleExit = () => {
   console.log('\nCleaning up build files...');
@@ -159,7 +154,6 @@ const handleExit = () => {
   process.exit();
 };
 
-// Ensure we only attach the listener once
 if (!process.listenerCount('SIGINT')) {
   process.on('SIGINT', handleExit);
 }
@@ -191,7 +185,6 @@ const py_build_plugin = () => {
         try {
           const output = execSync(command);
           console.log(output.toString().trim());
-
           server.ws.send({ type: 'full-reload', path: "*" });
           ready = true;
         } catch (e) {
@@ -221,24 +214,27 @@ const py_build_plugin = () => {
             build();
           }
         }
+
         if (filePath.includes('/assets/images/')) {
-             if (event === 'add' || event === 'change' || event === 'unlink') {
-                 console.log(`[watcher] Image change detected: ${event} ${filePath}`);
-                 try {
-                     const siteConfig = loadSiteConfig();
-                     await processImages(inputDir, outputDir, siteConfig);
-                     build();
-                 } catch (e) {
-                     console.error('[watcher] Image processing failed', e);
-                 }
-             }
+          if (event === 'add' || event === 'change' || event === 'unlink') {
+            console.log(`[watcher] Image change detected: ${event} ${filePath}`);
+            try {
+              const siteConfig = loadSiteConfig();
+              await processImages(inputDir, outputDir, siteConfig);
+              build();
+            } catch (e) {
+              console.error('[watcher] Image processing failed', e);
+            }
+          }
         }
+
         if (event === 'change' && filePath.includes('/assets/css/')) {
           build();
         }
+
         if (event === 'unlink') {
           if (!filePath.includes('/assets/images/')) {
-              build();
+            build();
           }
         }
       });
@@ -255,10 +251,15 @@ export default defineConfig(async ({ command }) => {
   }
 
   if (command === 'build') {
-    console.log('Buiding static pages for production');
+    console.log('Building static pages for production');
     try {
-      const output = execSync(`${pythonExecutable} src/main.py`);
-      console.log(output.toString().trim());
+      if (process.env.VERCEL) {
+        execSync('pip3 install -r requirements.txt --break-system-packages', { stdio: 'inherit' });
+        execSync('python3 src/main.py', { stdio: 'inherit' });
+      } else {
+        const output = execSync(`${pythonExecutable} src/main.py`);
+        console.log(output.toString().trim());
+      }
     } catch (e) {
       console.error('Failed to generate static files:', e);
       throw e;
@@ -276,6 +277,9 @@ export default defineConfig(async ({ command }) => {
       outDir: './dist',
       rollupOptions: {
         input: inputFiles,
+        output: {
+          assetFileNames: 'assets/[name][extname]',
+        },
       },
     },
     server: {
@@ -290,9 +294,9 @@ export default defineConfig(async ({ command }) => {
           '**/sitemap.xml',
           '**/blog/**',
           '**/posts/**',
-          '**/tags/**'
-        ]
-      }
-    }
+          '**/tags/**',
+        ],
+      },
+    },
   };
 });
