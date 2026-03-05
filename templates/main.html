@@ -79,30 +79,30 @@
 
     <script>
       const circuitImages = {
-        "albert_park":   "public/f1/f1_aus.webp",
-        "shanghai":      "public/f1/f1_china.webp",
-        "suzuka":        "public/f1/f1_japan.webp",
-        "bahrain":       "public/f1/f1_bahrain.webp",
-        "jeddah":        "public/f1/f1_jeddah.webp",
-        "miami":         "public/f1/f1_miami.webp",
-        "villeneuve":    "public/f1/f1_cannada.webp",
-        "monaco":        "public/f1/f1_monaco.webp",
-        "red_bull_ring": "public/f1/f1_rb.webp",
-        "silverstone":   "public/f1/f1_british.webp",
-        "spa":           "public/f1/f1_spa.webp",
-        "hungaroring":   "public/f1/f1_hung.webp",
-        "zandvoort":     "public/f1/f1_zan.webp",
-        "monza":         "public/f1/f1_monza.webp",
-        "catalunya":     "public/f1/f1_barcelona.webp",
-        "madrid":        "public/f1/f1_mad.webp",
-        "baku":          "public/f1/f1_baku.webp",
-        "marina_bay":    "public/f1/f1_sing.webp",
-        "americas":      "public/f1/f1_am.webp",
-        "rodriguez":     "public/f1/f1_mex.webp",
-        "interlagos":    "public/f1/f1_barzil.webp",
-        "vegas":         "public/f1/f1_lv.webp",
-        "losail":        "public/f1/f1_qatar.webp",
-        "yas_marina":    "public/f1/f1_yas.webp",
+        "albert_park":   "/f1/f1_aus.webp",
+        "shanghai":      "/f1/f1_china.webp",
+        "suzuka":        "/f1/f1_japan.webp",
+        "bahrain":       "/f1/f1_bahrain.webp",
+        "jeddah":        "/f1/f1_jeddah.webp",
+        "miami":         "/f1/f1_miami.webp",
+        "villeneuve":    "/f1/f1_cannada.webp",
+        "monaco":        "/f1/f1_monaco.webp",
+        "red_bull_ring": "/f1/f1_rb.webp",
+        "silverstone":   "/f1/f1_british.webp",
+        "spa":           "/f1/f1_spa.webp",
+        "hungaroring":   "/f1/f1_hung.webp",
+        "zandvoort":     "/f1/f1_zan.webp",
+        "monza":         "/f1/f1_monza.webp",
+        "catalunya":     "/f1/f1_barcelona.webp",
+        "madrid":        "/f1/f1_mad.webp",
+        "baku":          "/f1/f1_baku.webp",
+        "marina_bay":    "/f1/f1_sing.webp",
+        "americas":      "/f1/f1_am.webp",
+        "rodriguez":     "/f1/f1_mex.webp",
+        "interlagos":    "/f1/f1_barzil.webp",
+        "vegas":         "/f1/f1_lv.webp",
+        "losail":        "/f1/f1_qatar.webp",
+        "yas_marina":    "/f1/f1_yas.webp",
       };
 
       let raceDate;
@@ -119,7 +119,7 @@
         document.getElementById("f1-location").textContent =
           `${race.Circuit.Location.locality}, ${race.Circuit.Location.country}`;
 
-        const img = circuitImages[circuitId] || "/assets/for_web/f1_default.jpg";
+        const img = circuitImages[circuitId] || "/f1/f1_aus.webp";
         document.getElementById("f1-bg").src = img;
       })
       .catch(() => {
