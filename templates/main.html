@@ -2,7 +2,7 @@
 
 {% block content %}
 
-  <div class="flex flex-col items-center text-center w-fit"></div>
+  <div class="flex flex-col items-center text-center w-fit">
     <div class="min-h-screen flex flex-col items-center justify-center px-4 -mt-10">
 
       <div class="flex flex-col items-center text-center w-fit">
@@ -36,7 +36,7 @@
     </div>
   </div>
 
-  <!-- My Bias Section -->
+  <!-- Keep Up Section -->
   <div class="flex flex-col items-center px-4">
     <h2 class="text-4xl md:text-6xl font-extrabold text-center mb-8">Keep Up</h2>
 
@@ -44,7 +44,7 @@
     <div class="group mt-12 relative mx-auto w-full max-w-[480px] h-64 md:h-84 mb-8 bg-black/15 backdrop-blur-sm border border-white/20 hover:border-white/80 rounded-4xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden flex items-center justify-center">
       <img src="/assets/for_web/wc_web.jpg" class="absolute inset-0 w-full h-full object-cover object-center opacity-45 group-hover:opacity-70 scale-140 rounded-2xl transition-all duration-300" />
       <div class="relative z-10 flex flex-col items-center justify-center h-full w-full text-center">
-        <p class=" -mt-4 text-sm md:text-2xl font-bold tracking-widest uppercase text-red-300 mb-4 whitespace-nowrap">FIFA World Cup 2026</p>
+        <p class="-mt-4 text-sm md:text-2xl font-bold tracking-widest uppercase text-red-300 mb-4 whitespace-nowrap">FIFA World Cup 2026</p>
         <div id="countdown" class="mt-4 text-3xl md:text-5xl font-bold text-white whitespace-nowrap"></div>
       </div>
     </div>
@@ -54,78 +54,100 @@
         const worldCup = new Date("2026-06-11T00:00:00");
         const now = new Date();
         const diff = worldCup - now;
-
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const secs = Math.floor((diff % (1000 * 60)) / 1000);
-
         document.getElementById("countdown").textContent = `${days}d ${hours}h ${mins}m ${secs}s`;
       }
       updateCountdown();
       setInterval(updateCountdown, 1000);
     </script>
 
-      <!-- F1 Tile -->
-      <div class="group relative mx-auto w-full max-w-[480px] h-64 md:h-84 mb-8 bg-black/10 backdrop-blur-sm border border-white/20 hover:border-white/80 rounded-4xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden flex items-center justify-center">
-
-        <!-- Background Image -->
-        <img 
-          src="assets/for_web/f1_default.jpg"
-          class="absolute inset-0 w-full h-full object-cover opacity-45 group-hover:opacity-70 scale-100 transition-all duration-300"
-        />
-
-        <div class="relative z-10 flex flex-col items-center justify-center h-full w-full text-center">
-          <p class="text-sm font-semibold tracking-widest uppercase text-red-400 mb-2">
-            Till Race Day
-          </p>
-
-          <p id="f1-race-name" class="text-xl md:text-2xl font-extrabold text-white mb-1"></p>
-
-          <p id="f1-location" class="text-sm text-white/60 mb-4"></p>
-
-          <div id="f1-countdown" class="text-lg md:text-xl font-bold text-white"></div>
-        </div>
-
+    <!-- F1 Tile -->
+    <div class="group relative mx-auto w-full max-w-[480px] h-64 md:h-84 mb-8 bg-black/10 backdrop-blur-sm border border-white/20 hover:border-white/80 rounded-4xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden flex items-center justify-center">
+      <img
+        src="assets/for_web/f1_default.jpg"
+        class="absolute inset-0 w-full h-full object-cover opacity-45 group-hover:opacity-70 scale-100 transition-all duration-300"
+      />
+      <div class="relative z-10 flex flex-col items-center justify-center h-full w-full text-center">
+        <p class="text-sm font-semibold tracking-widest uppercase text-red-400 mb-2">Till Race Day</p>
+        <p id="f1-race-name" class="text-xl md:text-2xl font-extrabold text-white mb-1"></p>
+        <p id="f1-location" class="text-sm text-white/60 mb-4"></p>
+        <div id="f1-countdown" class="text-lg md:text-xl font-bold text-white"></div>
       </div>
+    </div>
 
-      <script>
+    <script>
       let raceDate;
-
       fetch("https://api.jolpi.ca/ergast/f1/current/next.json")
         .then(res => res.json())
         .then(data => {
           const race = data.MRData.RaceTable.Races[0];
-
           raceDate = new Date(`${race.date}T${race.time}`);
-
           document.getElementById("f1-race-name").textContent = race.raceName;
-
           document.getElementById("f1-location").textContent =
             `${race.Circuit.Location.locality}, ${race.Circuit.Location.country}`;
         })
         .catch(() => {
-          document.getElementById("f1-race-name").textContent =
-            "Could not load race data.";
+          document.getElementById("f1-race-name").textContent = "Could not load race data.";
         });
 
       function updateF1Countdown() {
         if (!raceDate) return;
-
         const now = new Date();
         const diff = raceDate - now;
-
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const secs = Math.floor((diff % (1000 * 60)) / 1000);
+        document.getElementById("f1-countdown").textContent = `${days}d ${hours}h ${mins}m ${secs}s`;
+      }
+      setInterval(updateF1Countdown, 1000);
+    </script>
 
-        document.getElementById("f1-countdown").textContent =
-          `${days}d ${hours}h ${mins}m ${secs}s`;
+    <!-- Pokemon Tile (click to open modal) -->
+    <div onclick="openPokemonModal()" class="group relative mx-auto w-full max-w-[480px] h-64 md:h-84 mb-8 bg-black/15 backdrop-blur-sm border border-white/20 hover:border-white/80 rounded-4xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden flex items-center justify-center cursor-pointer">
+
+      <!-- ADD YOUR POKEMON BACKGROUND IMAGE PATH HERE e.g. src="assets/for_web/your_image.jpg" -->
+      <img src="assets/for_web/pokemon_web.jpg" class="absolute inset-0 w-full h-full object-cover object-center opacity-45 group-hover:opacity-70 scale-140 rounded-2xl transition-all duration-300" />
+
+      <div class="relative z-10 flex flex-col items-center justify-center h-full w-full text-center">
+        <p class="-mt-4 text-sm md:text-3xl font-extrabold tracking-widest uppercase text-yellow-300 mb-4 whitespace-nowrap">Who's That Pokémon?</p>
+        <div class="mt-4 text-lg md:text-2xl font-bold text-white">Click to Play ▶</div>
+      </div>
+    </div>
+
+    <!-- Pokemon Modal (hidden until tile is clicked) -->
+    <div id="pokemon-modal" onclick="closePokemonModal(event)" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:1000; align-items:center; justify-content:center;">
+      <div onclick="event.stopPropagation()" style="position:relative; width:90vw; max-width:600px; border-radius:16px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.6);">
+        <button onclick="closePokemonModal()" style="position:absolute; top:10px; right:14px; z-index:10; background:rgba(0,0,0,0.5); color:white; border:none; border-radius:50%; width:32px; height:32px; font-size:18px; cursor:pointer; line-height:1;">✕</button>
+        <iframe
+          id="pokemon-frame"
+          src=""
+          scrolling="no"
+          style="width:100%; height:70vh; border:none; display:block;">
+        </iframe>
+      </div>
+    </div>
+
+    <script>
+      function openPokemonModal() {
+        const modal = document.getElementById('pokemon-modal');
+        const frame = document.getElementById('pokemon-frame');
+        // Only loads iframe when modal is opened — saves resources on page load
+        if (!frame.src || frame.src === window.location.href) {
+          frame.src = '/fun/whos-that-pokemon-quiz/index.html';
+        }
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
       }
 
-      setInterval(updateF1Countdown, 1000);
-      </script>
+      function closePokemonModal(event) {
+        document.getElementById('pokemon-modal').style.display = 'none';
+        document.body.style.overflow = '';
+      }
+    </script>
 
   </div>
 
