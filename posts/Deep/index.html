@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+<html lang="en" data-theme="synthwave">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deep Filtering: Listening to the Universe with AI | Karthik's Corner</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/syntax.css">
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+
+  <!-- Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
+  <!-- Vanta NET effect -->
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+
+  
+</head>
+
+<body class="min-h-screen flex flex-col overflow-x-hidden">
+  <div class="navbar bg-transparent fixed top-0 left-0 z-50 backdrop-blur-md">
+    <div class="flex-1">
+      <a href="/" class="btn btn-ghost text-xl">Karthik's Corner</a>
+    </div>
+    <div class="flex-none">
+      <ul class="menu menu-horizontal px-1">
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/projects/">Projects</a></li>
+        
+        <li><a href="/blog/">Blog</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+  </div>
+
+<div id="vanta-bg" class="fixed inset-0 w-full h-full -z-10 pointer-events-none"></div>
+
+<main class="relative z-10 min-h-screen container mx-auto p-8 pt-32">
+    
+
+<div class="max-w-4xl mx-auto">
+
+  <div class="bg-black/25 
+              backdrop-blur-sm
+              border border-blue-500/20
+              rounded-2xl 
+              p-8 md:p-12 
+              shadow-2xl">
+
+    <article class="prose prose-invert max-w-none
+                prose-p:text-gray-200
+                prose-headings:text-white
+                prose-strong:text-white
+                prose-a:text-blue-400
+                prose-hr:border-neutral-800">
+
+
+        <header>
+
+        <script>
+        window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        },
+        svg: {
+            fontCache: 'global'
+        }
+        };
+        </script>
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+
+            <h1 class="mb-3 text-3xl md:text-4xl font-semibold tracking-tight text-white">
+                Deep Filtering: Listening to the Universe with AI
+            </h1>
+
+            
+            <p class="text-sm text-gray-400">
+                Published on: 2026-02-12
+            </p>
+            
+
+            
+            <div class="mt-3 flex flex-wrap gap-2">
+                
+                <a class="badge badge-outline badge-sm border-neutral-600 text-gray-300"
+                   href="/tags/Science.html">
+                   Science
+                </a>
+                
+            </div>
+            
+
+            <hr class="my-6 border-neutral-800">
+        </header>
+
+        <p>My interest in science and astrophysics, combined with a growing fascination for machine learning, led me to explore a model that brings the best of both worlds together. In this blog, I’ll share what I’ve learned and walk you through how machine learning is now being used to make scientific tasks faster, smarter, and more efficient.</p>
+<hr />
+<h1 id="ligo">LIGO<a class="headerlink" href="#ligo" title="Permanent link">&para;</a></h1>
+<p>LIGO is the Laser Interferometer Gravitational-Wave Observatory. It’s an observatory that doesn’t look at light, stars, or planets the way a normal telescope does. Instead, it listens to the universe.</p>
+<p>Have you ever read an article about a newly discovered black hole where scientists somehow know how massive it is or how big it might be? It almost feels like guesswork, right? But it isn’t.</p>
+<p>What LIGO detects are gravitational waves, tiny ripples in spacetime caused by massive events like black holes colliding. When two huge objects interact, they disturb spacetime itself, and that disturbance travels all the way to Earth.</p>
+<p>Think of it like this: if you drop a rock into still water, waves spread out from the point of impact. Now imagine spacetime behaving like that water. Those ripples are what LIGO is designed to detect.</p>
+<hr />
+<h3 id="so-how-does-ligo-actually-measure-and-store-this-data">So how does LIGO actually measure and store this data?<a class="headerlink" href="#so-how-does-ligo-actually-measure-and-store-this-data" title="Permanent link">&para;</a></h3>
+<p>At its core, LIGO uses lasers. It has two long arms placed perpendicular to each other. A laser beam is split into two, sent down both arms, reflected by mirrors, and brought back together.</p>
+<p>Now here’s the cool part. When a gravitational wave passes through, it slightly stretches one arm and compresses the other. The change is insanely small, smaller than the width of a proton. For reference, a proton is about 1.7 × 10⁻¹⁵ meters small! But that tiny difference changes how the laser beams recombine.</p>
+<p>That change is recorded as data. LIGO is constantly collecting this data as a continuous stream over time. But here’s the problem, most of what it records is noise. Vibrations from the Earth, thermal effects, even distant human activity all get mixed in. The actual signal we care about is buried deep inside all that.</p>
+<hr />
+<h1 id="what-came-before-match-filtering">What Came Before: Match Filtering<a class="headerlink" href="#what-came-before-match-filtering" title="Permanent link">&para;</a></h1>
+<p>So how do we find a real signal in all that noise? This is where match filtering comes in.</p>
+<p>Match Filtering is mainly a bunch of complicated math but to explain what is actually does, let us use an example.</p>
+<p>Imagine you’re in a crowded room and a song is playing faintly in the background. If you already know the song, your brain can pick it out from the noise, regardless of all the other sounds in the room. You recognize the instruments used, beats it contains and the rhythm it follows.</p>
+<p>Match filtering works in a similar way. Scientists generate thousands of possible templates, basically predictions of what a gravitational wave should look like for different kinds of events. Then LIGO’s data is scanned against all of these templates.</p>
+<p>If something matches closely, there’s a good chance we’ve detected a real event.</p>
+<hr />
+<h1 id="but-recently-weve-started-doing-something-even-better">But recently… we’ve started doing something even better<a class="headerlink" href="#but-recently-weve-started-doing-something-even-better" title="Permanent link">&para;</a></h1>
+<p>Instead of manually comparing data to templates, what if a system could just learn what a signal looks like?</p>
+<p>A newer approach called deep filtering uses machine learning models, especially neural networks, to automatically detect and analyze signals. Instead of relying only on predefined templates, these models are trained on huge amounts of simulated data. Over time, they learn to recognize patterns autonomously.</p>
+<p>That means they can:<br />
+- Detect signals faster<br />
+- Work better in noisy conditions<br />
+- Extract features like mass and spin automatically  </p>
+<p>In a way, instead of telling the system what to look for, we’re letting it figure things out by itself, and that’s what makes deep filtering so powerful.</p>
+<hr />
+<h2 id="whats-happening-under-the-hood">What’s happening under the hood?<a class="headerlink" href="#whats-happening-under-the-hood" title="Permanent link">&para;</a></h2>
+<p>Deep filtering essentially uses a stack of two 1D convolutional neural networks (CNNs) to process gravitational wave data.</p>
+<p>Since LIGO data is a signal over time, not an image, we use a 1D CNN instead of the usual 2D one.</p>
+<p>Think of the data as a long waveform. Now imagine a small window, called a kernel, sliding across that waveform. At each step, it looks at a small chunk of the data, learns patterns from it, and moves forward.</p>
+<p><img alt="alt text" src="assets/for_web/image.png" /></p>
+<p>Instead of trying to understand everything at once, the network breaks the problem into small parts, learns local features, and then combines them into a bigger understanding. Over time, it starts recognizing things like oscillations, spikes, and full waveform patterns that indicate real events.</p>
+<hr />
+<h3 id="why-two-networks">Why two networks?<a class="headerlink" href="#why-two-networks" title="Permanent link">&para;</a></h3>
+<p>Deep filtering uses two separate CNNs, each with a specific job.</p>
+<p><strong>1. The Detector</strong><br />
+The first network answers a simple question, "is there a signal here or not?" It scans incoming data and separates noise from potential gravitational wave signals. This step needs to be fast and reliable.</p>
+<p><strong>2. The Predictor</strong><br />
+Once a signal is detected, the second network takes over. Instead of just saying something is there, it tries to figure out what exactly happened. It extracts key features like the masses and other properties of the objects involved.</p>
+<hr />
+<h3 id="putting-it-together">Putting it together<a class="headerlink" href="#putting-it-together" title="Permanent link">&para;</a></h3>
+<p>So instead of manually comparing data to thousands of templates, deep filtering creates a pipeline:</p>
+<ul>
+<li>First, detect whether something interesting exists  </li>
+<li>Then, immediately analyze and extract meaningful information  </li>
+</ul>
+<p>All of this can happen much faster, often in real time. It’s like having one system constantly listening for anything unusual, and another that instantly understands and explains what just happened.</p>
+<hr />
+<h2 id="how-do-these-networks-actually-learn">How do these networks actually learn?<a class="headerlink" href="#how-do-these-networks-actually-learn" title="Permanent link">&para;</a></h2>
+<p>Now comes the most interesting part: training.</p>
+<p>At a high level, training is just a loop of:<br />
+<strong>see data → make a guess → measure error → improve</strong></p>
+<hr />
+<h3 id="step-1-give-it-data-with-answers">Step 1: Give it data (with answers)<a class="headerlink" href="#step-1-give-it-data-with-answers" title="Permanent link">&para;</a></h3>
+<p>You train these networks using simulated gravitational wave signals mixed with noise.<br />
+So the network sees:<br />
+- Pure noise<br />
+- Noise with signals<br />
+And for the predictor network, it also sees the correct physical parameters.</p>
+<h3 id="step-2-the-network-makes-a-guess">Step 2: The network makes a guess<a class="headerlink" href="#step-2-the-network-makes-a-guess" title="Permanent link">&para;</a></h3>
+<p>The data passes through all the layers.<br />
+At the beginning, everything is random, so the predictions are not great.</p>
+<ul>
+<li>The detector guesses signal or no signal  </li>
+<li>The predictor guesses properties like mass  </li>
+</ul>
+<h3 id="step-3-measure-how-wrong-it-is">Step 3: Measure how wrong it is<a class="headerlink" href="#step-3-measure-how-wrong-it-is" title="Permanent link">&para;</a></h3>
+<p>The output is compared with the correct answer.<br />
+This difference is called the loss. The bigger the loss, the worse the prediction.</p>
+<h3 id="step-4-adjust-the-network">Step 4: Adjust the network<a class="headerlink" href="#step-4-adjust-the-network" title="Permanent link">&para;</a></h3>
+<p>This is where learning happens. The network goes backward through its layers and adjusts each kernel slightly to reduce the error. If a pattern was missed, it learns to detect it. If it reacted to noise, it learns to ignore it.</p>
+<h3 id="step-5-repeat">Step 5: Repeat<a class="headerlink" href="#step-5-repeat" title="Permanent link">&para;</a></h3>
+<p>This process is repeated thousands of times.<br />
+Over time:<br />
+- Early layers learn simple patterns<br />
+- Deeper layers learn complex waveform structures  </p>
+<h3 id="training-the-two-networks">Training the two networks<a class="headerlink" href="#training-the-two-networks" title="Permanent link">&para;</a></h3>
+<p>The two CNNs are usually trained separately:</p>
+<ul>
+<li>The detector learns to identify whether a signal exists  </li>
+<li>The predictor learns to estimate the properties of the signal  </li>
+</ul>
+<p>Even though we talk about layers, you don’t train them one by one. The entire network learns together, automatically figuring out what each layer should focus on.</p>
+<hr />
+
+    </article>
+
+  </div>
+
+</div>
+
+
+    
+</main>
+
+  <!-- Vanta INIT (must be after content exists) -->
+  <script>
+window.addEventListener('DOMContentLoaded', () => {
+  VANTA.NET({
+    el: "#vanta-bg",
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    minHeight: 200.0,
+    minWidth: 200.0,
+    scale: 1.0,
+    scaleMobile: 1.0,
+    color: 0x3f83f8,
+    // Change this to match your dark navy background (e.g., 0x05051e)
+    backgroundColor: 0x05051e, 
+    points: 10.0,
+    maxDistance: 20.0,
+    spacing: 15.0
+  })
+})
+  </script> 
+
+  <!--sum stuff to comit
+   -->
+
+</body>
+</html>

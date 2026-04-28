@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="en" data-theme="synthwave">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Me | Karthik's Corner</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/syntax.css">
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+
+  <!-- Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
+  <!-- Vanta NET effect -->
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+
+  
+</head>
+
+<body class="min-h-screen flex flex-col overflow-x-hidden">
+  <div class="navbar bg-transparent fixed top-0 left-0 z-50 backdrop-blur-md">
+    <div class="flex-1">
+      <a href="/" class="btn btn-ghost text-xl">Karthik's Corner</a>
+    </div>
+    <div class="flex-none">
+      <ul class="menu menu-horizontal px-1">
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/projects/">Projects</a></li>
+        
+        <li><a href="/blog/">Blog</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+  </div>
+
+<div id="vanta-bg" class="fixed inset-0 w-full h-full -z-10 pointer-events-none"></div>
+
+<main class="relative z-10 min-h-screen container mx-auto p-8 pt-32">
+    
+<div class="max-w-4xl mx-auto">
+    <div class="bg-black/25 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-8 md:p-12 shadow-2xl">
+        <h1 class="text-4xl md:text-7xl font-extrabold tracking-tight mb-5 -mt-10 text-center -py-4" >About Me</h1>
+
+        <div class="mx-auto w-48 md:w-72 lg:w-98 mb-8 rounded-full p-1 bg-white/10 backdrop-blur-sm border border-white/20 shadow-2xl">
+            <img src="/assets/for_web/prof_pic.png" alt="Profile Picture" class="rounded-full w-full">
+        </div>
+
+        <p class="mb-4 text-center text-ls mx-auto px-4">Fun fact this image was made by me in MS Paint!<br> PS: hope you got the reference in the profile picture!</p>
+
+        <div class="max-w-3xl mx-auto text- mb-4">
+            <p class="mb-4 text-md font-semibold">Hi! I'm Karthik Gollapudi, a first year B.Tech student at PES University driven by curiosity and a genuine love for learning. I'm deeply interested in deep learning, operating systems, quantum computing, and physics, with a special fascination for astrophysics and the big questions about our universe. I'm currently working on a collaborative deep learning research project where we compare different regularisation techniques and study how effectively they learn, reconstruct, and generate data.</p>
+            <p class="mb-4 text-md font-semibold">Outside academics, I channel that same intensity into my passions. I'm a loyal supporter of FC Barcelona and closely follow Formula 1. I'm also a massive combat sports enthusiast who keeps up with Ultimate Fighting Championship and professional boxing. I love driving, especially with music blasting across genres, from pop and hip hop to UK drill and rock like Linkin Park. I'm big on sports video games too, spending time on EA Sports FC 24, F1 23, and Undisputed. When I want a strong narrative experience, I dive into story driven games like Detroit: Become Human and Red Dead Redemption 2.</p>
+            <p class="mb-4 text-md font-semibold">I'm also an anime fan, a manga and light novel reader, and a dedicated fan of the Pokémon games, my personal favourite being Pokémon: Emerald. Whether it's building models, watching a title fight, following a Grand Prix weekend, or going on a late night drive with a great playlist, I'm always pushing forward and enjoying the journey.</p>
+             <p class="mb-4 text-small font-semibold">type in pikachu or press shift+p for a surprise</p>
+        </div>
+    </div>
+</div>
+
+    
+</main>
+
+  <!-- Vanta INIT (must be after content exists) -->
+  <script>
+window.addEventListener('DOMContentLoaded', () => {
+  VANTA.NET({
+    el: "#vanta-bg",
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    minHeight: 200.0,
+    minWidth: 200.0,
+    scale: 1.0,
+    scaleMobile: 1.0,
+    color: 0x3f83f8,
+    // Change this to match your dark navy background (e.g., 0x05051e)
+    backgroundColor: 0x05051e, 
+    points: 10.0,
+    maxDistance: 20.0,
+    spacing: 15.0
+  })
+})
+  </script> 
+
+  <!--sum stuff to comit
+   -->
+
+</body>
+</html>
