@@ -149,3 +149,188 @@ The two CNNs are usually trained separately:
 Even though we talk about layers, you don’t train them one by one. The entire network learns together, automatically figuring out what each layer should focus on.
 
 ---
+## Where Deep Filtering Falls Short
+
+Now that we understand how deep filtering works, it’s important to realize that it isn’t perfect. Like any model, it comes with its own set of limitations.
+
+### Some key limitations
+- It struggles with signals that differ from what it has seen during training  
+- Performance can degrade in highly noisy or unexpected conditions  
+- It mainly focuses on local patterns, which can limit its ability to capture long-range dependencies  
+- Scaling to more complex signal structures can become computationally expensive  
+
+---
+
+## A Direction I’ve Been Exploring
+
+These limitations got me thinking. What if instead of relying purely on CNNs to process raw signals, we changed how the data is represented before it’s analyzed? I’m currently exploring a model architecture that tries to combine representation learning with sequence modeling.
+
+---
+
+## Core Idea
+
+The idea is to first **discretize the signal using an encoder**.
+
+- The encoder compresses the raw signal into a latent representation  
+- This latent space is then **tokenized**, turning it into a sequence of discrete elements  
+
+Once we have this sequence, it can be passed into a **transformer model**.
+
+---
+
+## Why This Might Help
+
+CNNs are very good at extracting local features, but they don’t naturally capture relationships across an entire signal. Transformers, on the other hand, are designed to model global dependencies.
+
+So the intuition is:
+- The **encoder** learns a compact and meaningful representation  
+- The **tokenization step** structures the data  
+- The **transformer** learns relationships across the full sequence  
+
+---
+## A Note on This Approach
+
+This is still an idea I’m exploring, not a fully validated improvement over existing methods. The goal here is not to replace deep filtering outright, but to experiment with ways to make models:
+
+- More adaptable  
+- Better at handling complex signals  
+- More robust to noise  
+---
+
+In the next section, I’ll try to break down this architecture further and explore how it could actually be implemented.
+
+## A Quick Intuition for Transformers
+
+Since this idea relies on transformers, it’s worth building a bit of intuition for how they work. At a high level, a **transformer** is a model designed to understand relationships within a sequence. This sequence could be words in a sentence, or in our case, tokens representing parts of a signal.
+
+
+### How is it different from CNNs?
+
+CNNs look at small chunks of data at a time. They slide a window across the input and focus on local patterns. Transformers do something very different. Instead of looking at just nearby values, a transformer can look at the **entire sequence at once** and learn how every part relates to every other part.
+
+The core concept behind transformers is something called **attention**. You can think of attention as a way for the model to decide:
+> “Which parts of this input are important when understanding this specific part?”
+
+For example:
+- In a sentence, a word might depend on another word far away  
+- In a signal, one part of a waveform might relate to something that happened much earlier  
+Attention allows the model to connect these distant pieces directly.
+---
+
+### What does the transformer actually do?
+
+Once you feed in a sequence of tokens, the transformer:
+
+1. Looks at all tokens together  
+2. Assigns importance (attention) between them  
+3. Builds a richer representation by combining this information  
+
+This process is repeated across multiple layers, allowing the model to learn increasingly complex relationships.
+
+---
+
+### Why this fits our model
+
+In our case:
+- The encoder converts the signal into tokens  
+- The transformer processes those tokens  
+
+This means the model is no longer limited to local patterns. It can:
+- Capture long-range dependencies  
+- Understand the overall structure of the signal  
+- Potentially detect patterns that CNNs might miss  
+
+If CNNs are like scanning a signal piece by piece,  
+transformers are like stepping back and looking at the entire signal at once, understanding how everything connects.
+
+---
+## Putting It All Together: A Hybrid Architecture
+
+Now that we have a basic idea of what the model architecture looks like, let’s link everything together into a single pipeline.
+The goal here is to combine:
+- Discretization (VQ-VAE-2)  
+- Anomaly detection (via reconstruction loss)  
+- Sequence modeling (transformers)  
+
+### Step 1: Learning the Structure of Noise (VQ-VAE-2)
+
+We start with **VQ-VAE-2**, a variant of a Vector Quantized Autoencoder where discretization is applied to the latent space Unlike a standard autoencoder, this model:
+- Compresses the input signal  
+- Maps it to a **discrete codebook** (set of learned vectors)  
+- Reconstructs the signal from these discrete representations  
+
+
+The key idea here is how we train it. Instead of training on signals, the encoder is trained primarily on **simulated noise** (similar to what LIGO observes). Over time, it becomes very good at learning:
+> “What does normal noise look like?”
+
+
+### Step 2: Using Reconstruction Loss as a Signal
+
+Once trained, we pass real data through this model.
+- If the input is just noise → it reconstructs well  
+- If the input contains a real signal → reconstruction becomes worse  
+
+This difference shows up as **reconstruction loss**. So instead of directly detecting signals, the model is acting as a kind of **anomaly detector**, highlighting parts of the data that don’t fit the learned noise distribution.
+
+### Step 3: Discretizing the Signal
+
+Because we’re using VQ-VAE-2:
+- The latent space is not continuous  
+- Each part of the signal is mapped to a **codebook index**  
+
+This effectively converts the signal into a **sequence of discrete tokens**. At this stage, we now have two things:
+- A **tokenized representation** of the signal  
+- A **reconstruction loss map** showing which regions are unusual  
+
+### Step 4: Selecting What to Pass Forward
+
+Instead of blindly feeding the entire latent space into the transformer, we use the reconstruction loss to guide us.
+Rather than hard filtering, we use a **soft selection approach**:
+- Regions with higher reconstruction loss are treated as more important  
+- We can select top-k segments or assign higher weights to these regions  
+
+This way:
+- We **prioritize likely signal regions**  
+- But still retain enough context to avoid losing important information  
+
+### Step 5: Transformer for Global Understanding
+
+The selected (and structured) token sequence is then passed into a **transformer**.
+Here, the model:
+- Looks at the entire sequence  
+- Learns relationships between different regions  
+- Captures long-range dependencies in the signal  
+
+This allows it to move beyond local feature detection and understand the signal at a global level.
+
+---
+
+### The Full Pipeline
+
+You can think of the system in stages:
+1. **Learn noise** → build a vocabulary of normal patterns  
+2. **Spot deviations** → use reconstruction loss to highlight anomalies  
+3. **Discretize** → convert the signal into tokens  
+4. **Prioritize** → focus on important regions without discarding context  
+5. **Interpret** → use a transformer to analyze the full structure  
+
+Instead of directly searching for signals in noisy data, this approach:
+- Learns what “normal” looks like first  
+- Uses that to guide attention toward unusual regions  
+- Represents the data in a structured, tokenized form  
+- Applies global reasoning through a transformer  
+
+---
+
+## Important Note
+
+This model does not strictly separate noise and signal.
+
+Instead, it creates a **structured way to highlight and analyze deviations from noise**.
+
+The effectiveness of this approach depends heavily on:
+- How well the noise is modeled  
+- How the reconstruction loss threshold is tuned  
+- How much information is retained before the transformer  
+
+### This is still an experimental idea, but it provides a framework for combining representation learning, anomaly detection, and sequence modeling into a single pipeline.
