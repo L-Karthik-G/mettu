@@ -1,6 +1,6 @@
 ---
 title: "Deep Filtering: Listening to the Universe with AI"
-date: "2026-02-12"
+date: "2026-04-29"
 layout: "post"
 tags:
     - "Science"
@@ -18,6 +18,8 @@ Have you ever read an article about a newly discovered black hole where scientis
 
 What LIGO detects are gravitational waves, tiny ripples in spacetime caused by massive events like black holes colliding. When two huge objects interact, they disturb spacetime itself, and that disturbance travels all the way to Earth.
 
+!['ligo'](https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExNW8zZ2ZtYjFybXhvancxNG0zbWZjNXk1YWxobHB2dGYyMTF6dDJwOSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xUOwGfovSejz0WVAm4/giphy.gif)
+
 Think of it like this: if you drop a rock into still water, waves spread out from the point of impact. Now imagine spacetime behaving like that water. Those ripples are what LIGO is designed to detect.
 
 ---
@@ -27,6 +29,8 @@ Think of it like this: if you drop a rock into still water, waves spread out fro
 At its core, LIGO uses lasers. It has two long arms placed perpendicular to each other. A laser beam is split into two, sent down both arms, reflected by mirrors, and brought back together.
 
 Now here’s the cool part. When a gravitational wave passes through, it slightly stretches one arm and compresses the other. The change is insanely small, smaller than the width of a proton. For reference, a proton is about 1.7 × 10⁻¹⁵ meters small! But that tiny difference changes how the laser beams recombine.
+
+!['deep'](/assets/for_blogs/ligo_device.jpg)
 
 That change is recorded as data. LIGO is constantly collecting this data as a continuous stream over time. But here’s the problem, most of what it records is noise. Vibrations from the Earth, thermal effects, even distant human activity all get mixed in. The actual signal we care about is buried deep inside all that.
 
@@ -69,7 +73,7 @@ Since LIGO data is a signal over time, not an image, we use a 1D CNN instead of 
 
 Think of the data as a long waveform. Now imagine a small window, called a kernel, sliding across that waveform. At each step, it looks at a small chunk of the data, learns patterns from it, and moves forward.
 
-![alt text](assets/for_web/image.png)
+!['elbo'](/assets/for_blogs/image.png)
 
 Instead of trying to understand everything at once, the network breaks the problem into small parts, learns local features, and then combines them into a bigger understanding. Over time, it starts recognizing things like oscillations, spikes, and full waveform patterns that indicate real events.
 
@@ -203,6 +207,8 @@ In the next section, I’ll try to break down this architecture further and expl
 
 Since this idea relies on transformers, it’s worth building a bit of intuition for how they work. At a high level, a **transformer** is a model designed to understand relationships within a sequence. This sequence could be words in a sentence, or in our case, tokens representing parts of a signal.
 
+!['elbo'](/assets/for_blogs/tans.jpg)
+**(Transformers are most commonly used in natural language processing, but in this case, we apply the same idea to time-series signals.)**
 
 ### How is it different from CNNs?
 
@@ -243,6 +249,14 @@ This means the model is no longer limited to local patterns. It can:
 If CNNs are like scanning a signal piece by piece,  
 transformers are like stepping back and looking at the entire signal at once, understanding how everything connects.
 
+### A natural question here is whether transformers are even the right choice. 
+**They are built around attention and learning relationships within a sequence, but in signal data there is no strict guarantee that one part of the signal is related to another.** 
+*Unlike language, where structure is explicit, signals can often appear noisy or loosely connected.*
+
+**However, transformers are still useful not because they assume relationships, but because they can *learn when and where they exist*.Instead of forcing connections, they dynamically focus on important regions across the entire signal.** 
+
+**This allows them to capture long-range patterns, ignore irrelevant noise, and adapt to complex structures when they appear.So the advantage here is not just modeling relationships, but giving the model the flexibility to decide what actually matters.**
+
 ---
 ## Putting It All Together: A Hybrid Architecture
 
@@ -251,6 +265,8 @@ The goal here is to combine:
 - Discretization (VQ-VAE-2)  
 - Anomaly detection (via reconstruction loss)  
 - Sequence modeling (transformers)  
+
+!['elbo'](/assets/for_blogs/model_arch_2.png)
 
 ### Step 1: Learning the Structure of Noise (VQ-VAE-2)
 
