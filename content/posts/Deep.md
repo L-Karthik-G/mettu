@@ -4,6 +4,9 @@ date: "2026-04-29"
 layout: "post"
 tags:
     - "Science"
+    - "machine learning"
+    - "Deep Learning"
+    
 ---
 
 My interest in science and astrophysics, combined with a growing fascination for machine learning, led me to explore a model that brings the best of both worlds together. In this blog, I’ll share what I’ve learned and walk you through how machine learning is now being used to make scientific tasks faster, smarter, and more efficient.
@@ -38,9 +41,7 @@ That change is recorded as data. LIGO is constantly collecting this data as a co
 
 # What Came Before: Match Filtering
 
-So how do we find a real signal in all that noise? This is where match filtering comes in.
-
-Match Filtering is mainly a bunch of complicated math but to explain what is actually does, let us use an example.
+So how do we find a real signal in all that noise? This is where match filtering comes in. Match Filtering is mainly a bunch of complicated math but to explain what is actually does, let us use an example.
 
 Imagine you’re in a crowded room and a song is playing faintly in the background. If you already know the song, your brain can pick it out from the noise, regardless of all the other sounds in the room. You recognize the instruments used, beats it contains and the rhythm it follows.
 
@@ -63,13 +64,10 @@ That means they can:
 
 In a way, instead of telling the system what to look for, we’re letting it figure things out by itself, and that’s what makes deep filtering so powerful.
 
----
 
 ## What’s happening under the hood?
 
-Deep filtering essentially uses a stack of two 1D convolutional neural networks (CNNs) to process gravitational wave data.
-
-Since LIGO data is a signal over time, not an image, we use a 1D CNN instead of the usual 2D one.
+Deep filtering essentially uses a stack of two 1D convolutional neural networks (CNNs) to process gravitational wave data. Since LIGO data is a signal over time, not an image, we use a 1D CNN instead of the usual 2D one.
 
 Think of the data as a long waveform. Now imagine a small window, called a kernel, sliding across that waveform. At each step, it looks at a small chunk of the data, learns patterns from it, and moves forward.
 
@@ -77,7 +75,6 @@ Think of the data as a long waveform. Now imagine a small window, called a kerne
 
 Instead of trying to understand everything at once, the network breaks the problem into small parts, learns local features, and then combines them into a bigger understanding. Over time, it starts recognizing things like oscillations, spikes, and full waveform patterns that indicate real events.
 
----
 
 ### Why two networks?
 
@@ -90,7 +87,6 @@ The first network answers a simple question, "is there a signal here or not?" It
 **2. The Predictor**  
 Once a signal is detected, the second network takes over. Instead of just saying something is there, it tries to figure out what exactly happened. It extracts key features like the masses and other properties of the objects involved.
 
----
 
 ### Putting it together
 
@@ -110,7 +106,6 @@ Now comes the most interesting part: training.
 At a high level, training is just a loop of:  
 **see data → make a guess → measure error → improve**
 
----
 
 ### Step 1: Give it data (with answers)
 You train these networks using simulated gravitational wave signals mixed with noise.
@@ -210,6 +205,7 @@ Since this idea relies on transformers, it’s worth building a bit of intuition
 !['elbo'](/assets/for_blogs/tans.jpg)
 **(Transformers are most commonly used in natural language processing, but in this case, we apply the same idea to time-series signals.)**
 
+
 ### How is it different from CNNs?
 
 CNNs look at small chunks of data at a time. They slide a window across the input and focus on local patterns. Transformers do something very different. Instead of looking at just nearby values, a transformer can look at the **entire sequence at once** and learn how every part relates to every other part.
@@ -222,6 +218,7 @@ For example:
 - In a signal, one part of a waveform might relate to something that happened much earlier  
 Attention allows the model to connect these distant pieces directly.
 ---
+
 
 ### What does the transformer actually do?
 
@@ -253,7 +250,7 @@ transformers are like stepping back and looking at the entire signal at once, un
 **They are built around attention and learning relationships within a sequence, but in signal data there is no strict guarantee that one part of the signal is related to another.** 
 *Unlike language, where structure is explicit, signals can often appear noisy or loosely connected.*
 
-**However, transformers are still useful not because they assume relationships, but because they can *learn when and where they exist*.Instead of forcing connections, they dynamically focus on important regions across the entire signal.** 
+**However, transformers are still useful not because they assume relationships, but because they can *learn when and where they exist*. Instead of forcing connections, they dynamically focus on important regions across the entire signal.** 
 
 **This allows them to capture long-range patterns, ignore irrelevant noise, and adapt to complex structures when they appear.So the advantage here is not just modeling relationships, but giving the model the flexibility to decide what actually matters.**
 
