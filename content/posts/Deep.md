@@ -263,7 +263,7 @@ The goal here is to combine:
 - Anomaly detection (via reconstruction loss)  
 - Sequence modeling (transformers)  
 
-!['elbo'](/assets/for_blogs/model_arch_2.png)
+!['elbo'](/assets/for_blogs/arch.gif)
 
 ### Step 1: Learning the Structure of Noise (VQ-VAE-2)
 
@@ -271,8 +271,6 @@ We start with **VQ-VAE-2**, a variant of a Vector Quantized Autoencoder where di
 - Compresses the input signal  
 - Maps it to a **discrete codebook** (set of learned vectors)  
 - Reconstructs the signal from these discrete representations  
-
-!['elbo'](/assets/for_blogs/arch.gif)
 
 The key idea here is how we train it. Instead of training on signals, the encoder is trained primarily on **simulated noise** (similar to what LIGO observes). Over time, it becomes very good at learning:
 > “What does normal noise look like?”
