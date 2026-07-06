@@ -47,7 +47,7 @@ const resolvePythonExecutable = () => {
   }
 
   const venvPythonBin = path.join(__dirname, '.venv/bin/python');
-  const venvPythonScripts = path.join(__dirname, '.venv/Scripts/python.exe');
+  const venvPythonScripts = path.join(__dirname, '.venv/bin/python');
 
   if (process.platform === 'win32') {
     if (fs.existsSync(venvPythonScripts)) return venvPythonScripts;
