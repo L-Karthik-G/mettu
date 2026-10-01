@@ -34,128 +34,125 @@ site.theme.default is defined else (site.theme if site.theme is defined else "dr
 </head>
 
 <body class="min-h-screen flex flex-col overflow-x-hidden">
-  <div class="navbar bg-black/20 backdrop-blur-md fixed top-0 left-0 z-50 px-4 sm:px-8 py-1.5 flex items-center justify-between gap-4 w-full">
-    <!-- Left: Site Name -->
-    <div class="flex-none">
-      <a href="/" class="btn btn-ghost text-xl sm:text-2xl font-extrabold tracking-tight px-2">{{ site.site_name }}</a>
-    </div>
+  <header class="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-md w-full">
+    <div class="px-4 sm:px-8 py-2 flex items-center justify-between gap-4 w-full">
+      <!-- Left: Site Name -->
+      <div class="flex-none">
+        <a href="/" class="btn btn-ghost text-xl sm:text-2xl font-extrabold tracking-tight px-2">{{ site.site_name }}</a>
+      </div>
 
-    {% if posts and posts|length > 0 %}
-    <!-- Middle: Rotating Blog Post Notification (Desktop only, hidden on mobile) -->
-    <div class="flex-1 max-w-xl hidden md:flex items-center justify-center">
-      <a id="nav-blog-pill" href="{{ posts[0].url.rstrip('/') }}/" class="group flex items-center gap-2.5 px-3.5 py-1.5 rounded-lg bg-black/40 border border-white/15 hover:border-blue-400/50 hover:bg-black/60 transition-all duration-300 shadow-md">
-        <span class="flex h-2.5 w-2.5 relative shrink-0">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
-        </span>
-        <span class="text-xs sm:text-sm font-bold uppercase tracking-wider text-blue-400 shrink-0">Blog</span>
-        <span class="text-xs text-white/30 shrink-0">|</span>
-        <span id="nav-blog-title" class="text-sm sm:text-base text-gray-200 group-hover:text-white transition-opacity duration-300 truncate max-w-[260px] md:max-w-md font-semibold">
-          {{ posts[0].title }}
-        </span>
-        <span class="text-sm text-blue-400 group-hover:translate-x-0.5 transition-transform shrink-0">→</span>
-      </a>
-    </div>
+      {% if posts and posts|length > 0 %}
+      <!-- Middle: Rotating Blog Post Notification (Desktop only, hidden on mobile) -->
+      <div class="flex-1 max-w-xl hidden md:flex items-center justify-center">
+        <a id="nav-blog-pill" href="{{ posts[0].url.rstrip('/') }}/" class="group flex items-center gap-2.5 px-3.5 py-1.5 rounded-lg bg-black/40 border border-white/15 hover:border-blue-400/50 hover:bg-black/60 transition-all duration-300 shadow-md">
+          <span class="flex h-2.5 w-2.5 relative shrink-0">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
+          </span>
+          <span class="text-xs sm:text-sm font-bold uppercase tracking-wider text-blue-400 shrink-0">Blog</span>
+          <span class="text-xs text-white/30 shrink-0">|</span>
+          <span id="nav-blog-title" class="text-sm sm:text-base text-gray-200 group-hover:text-white transition-opacity duration-300 truncate max-w-[260px] md:max-w-md font-semibold">
+            {{ posts[0].title }}
+          </span>
+          <span class="text-sm text-blue-400 group-hover:translate-x-0.5 transition-transform shrink-0">→</span>
+        </a>
+      </div>
 
-    <script>
-    (() => {
-      const topPosts = [
-        {% for p in posts[:3] %}
-        {
-          title: {{ p.title | tojson }},
-          url: {{ (p.url.rstrip('/') ~ '/') | tojson }}
-        },
-        {% endfor %}
-      ];
-
-      if (topPosts.length > 1) {
-        let currentIndex = 0;
-        const pill = document.getElementById("nav-blog-pill");
-        const titleEl = document.getElementById("nav-blog-title");
-        const heroPill = document.getElementById("hero-blog-pill");
-        const heroTitleEl = document.getElementById("hero-blog-title");
-
-        setInterval(() => {
-          currentIndex = (currentIndex + 1) % topPosts.length;
-          const nextPost = topPosts[currentIndex];
-
-          if (pill && titleEl) {
-            titleEl.style.opacity = "0";
-            setTimeout(() => {
-              titleEl.textContent = nextPost.title;
-              pill.href = nextPost.url;
-              titleEl.style.opacity = "1";
-            }, 350);
-          }
-
-          if (heroPill && heroTitleEl) {
-            heroTitleEl.style.opacity = "0";
-            setTimeout(() => {
-              heroTitleEl.textContent = nextPost.title;
-              heroPill.href = nextPost.url;
-              heroTitleEl.style.opacity = "1";
-            }, 350);
-          }
-        }, 6000);
-      }
-    })();
-    </script>
-    {% endif %}
-
-    <!-- Compute current active nav page -->
-    {% set current_nav = namespace(name='Home') %}
-    {% for item in site.navigation %}
-      {% if page and page.url is defined %}
-        {% if item.url == '/' and (page.url == '/' or page.url == '') %}
-          {% set current_nav.name = item.name %}
-        {% elif item.url != '/' and (page.url == item.url or page.url.startswith(item.url.rstrip('/'))) %}
-          {% set current_nav.name = item.name %}
-        {% endif %}
-      {% endif %}
-    {% endfor %}
-    {% if page and page.url is defined and (page.url.startswith('/posts') or page.url.startswith('/tags')) %}
-      {% set current_nav.name = 'Blog' %}
-    {% endif %}
-
-    <!-- Right on Mobile: Current page with ... underneath (No box, clean dropdown table) -->
-    <div class="relative md:hidden flex-none">
-      <button id="mobile-nav-toggle" type="button" class="flex flex-col items-end justify-center py-1 px-1.5 focus:outline-none cursor-pointer group bg-transparent border-0 select-none" aria-label="Open page navigation menu" aria-expanded="false">
-        <span class="text-sm font-bold text-blue-400 group-hover:text-blue-300 leading-tight tracking-wide">{{ current_nav.name }}</span>
-        <span class="text-lg tracking-[0.25em] font-extrabold text-gray-300 group-hover:text-white leading-none -mt-0.5">...</span>
-      </button>
-
-      <!-- Dropdown table / menu -->
-      <div id="mobile-nav-menu" class="hidden absolute right-0 top-full mt-2 w-52 rounded-2xl bg-black/90 backdrop-blur-2xl border border-white/20 shadow-2xl overflow-hidden z-[999] divide-y divide-white/10">
-        <div class="px-4 py-2 bg-white/5 flex items-center justify-between text-xs font-bold uppercase tracking-wider text-gray-300">
-          <span>Navigate</span>
-          <span class="text-blue-400 text-xs">●</span>
-        </div>
-        <div class="p-1.5 space-y-1">
-          {% for item in site.navigation %}
-          <a href="{{ item.url }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors {% if item.name == current_nav.name %}text-blue-400 bg-white/10{% else %}text-gray-200 hover:text-blue-400 hover:bg-white/5 active:bg-white/10{% endif %}">
-            <span>{{ item.name }}</span>
-            {% if item.name == current_nav.name %}
-            <span class="text-[11px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30 font-medium">Current</span>
-            {% endif %}
-          </a>
+      <script>
+      (() => {
+        const topPosts = [
+          {% for p in posts[:3] %}
+          {
+            title: {{ p.title | tojson }},
+            url: {{ (p.url.rstrip('/') ~ '/') | tojson }}
+          },
           {% endfor %}
-        </div>
+        ];
+
+        if (topPosts.length > 1) {
+          let currentIndex = 0;
+          const pill = document.getElementById("nav-blog-pill");
+          const titleEl = document.getElementById("nav-blog-title");
+          const heroPill = document.getElementById("hero-blog-pill");
+          const heroTitleEl = document.getElementById("hero-blog-title");
+
+          setInterval(() => {
+            currentIndex = (currentIndex + 1) % topPosts.length;
+            const nextPost = topPosts[currentIndex];
+
+            if (pill && titleEl) {
+              titleEl.style.opacity = "0";
+              setTimeout(() => {
+                titleEl.textContent = nextPost.title;
+                pill.href = nextPost.url;
+                titleEl.style.opacity = "1";
+              }, 350);
+            }
+
+            if (heroPill && heroTitleEl) {
+              heroTitleEl.style.opacity = "0";
+              setTimeout(() => {
+                heroTitleEl.textContent = nextPost.title;
+                heroPill.href = nextPost.url;
+                heroTitleEl.style.opacity = "1";
+              }, 350);
+            }
+          }, 6000);
+        }
+      })();
+      </script>
+      {% endif %}
+
+      <!-- Compute current active nav page -->
+      {% set current_nav = namespace(name='Home') %}
+      {% for item in site.navigation %}
+        {% if page and page.url is defined %}
+          {% if item.url == '/' and (page.url == '/' or page.url == '') %}
+            {% set current_nav.name = item.name %}
+          {% elif item.url != '/' and (page.url == item.url or page.url.startswith(item.url.rstrip('/'))) %}
+            {% set current_nav.name = item.name %}
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+      {% if page and page.url is defined and (page.url.startswith('/posts') or page.url.startswith('/tags')) %}
+        {% set current_nav.name = 'Blog' %}
+      {% endif %}
+
+      <!-- Right on Desktop: Standard horizontal links -->
+      <div class="hidden md:flex flex-none">
+        <ul class="flex items-center gap-2 flex-nowrap whitespace-nowrap text-base font-semibold">
+          {% for item in site.navigation %}
+          <li>
+            <a href="{{ item.url }}" class="rounded-lg px-3 py-1.5 {% if page and page.url is defined and ((page.url == item.url) or (item.url != '/' and page.url.startswith(item.url))) %}text-blue-400 bg-white/10{% else %}text-gray-200 hover:text-blue-400 hover:bg-white/5{% endif %} transition-colors">
+              {{ item.name }}
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- Right on Mobile: Current page with ... underneath -->
+      <div class="md:hidden flex-none">
+        <button id="mobile-nav-toggle" type="button" class="flex flex-col items-end justify-center py-1 px-1 focus:outline-none cursor-pointer group bg-transparent border-0 select-none" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span class="text-sm font-bold text-blue-400 group-hover:text-blue-300 leading-tight tracking-wide">{{ current_nav.name }}</span>
+          <span class="text-lg tracking-[0.25em] font-extrabold text-gray-300 group-hover:text-white leading-none -mt-0.5">...</span>
+        </button>
       </div>
     </div>
 
-    <!-- Right on Desktop: Standard horizontal links -->
-    <div class="hidden md:flex flex-none">
-      <ul class="flex items-center gap-2 flex-nowrap whitespace-nowrap text-base font-semibold">
+    <!-- Mobile Expanded Top Bar: Simple vertical list of pages -->
+    <div id="mobile-nav-menu" class="hidden md:hidden px-6 pb-4 pt-1 border-t border-white/10">
+      <ul class="flex flex-col space-y-1 text-base font-semibold">
         {% for item in site.navigation %}
         <li>
-          <a href="{{ item.url }}" class="rounded-lg px-3 py-1.5 {% if page and page.url is defined and ((page.url == item.url) or (item.url != '/' and page.url.startswith(item.url))) %}text-blue-400 bg-white/10{% else %}text-gray-200 hover:text-blue-400 hover:bg-white/5{% endif %} transition-colors">
+          <a href="{{ item.url }}" class="block px-3 py-2 rounded-lg {% if item.name == current_nav.name %}text-blue-400 bg-white/10{% else %}text-gray-200 hover:text-blue-400 hover:bg-white/5{% endif %} transition-colors">
             {{ item.name }}
           </a>
         </li>
         {% endfor %}
       </ul>
     </div>
-  </div>
+  </header>
 
   <script>
   (() => {
