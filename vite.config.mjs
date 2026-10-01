@@ -10,6 +10,7 @@ import glob from 'fast-glob';
 import { processImages } from './src/image-preprocess.mjs';
 
 dotenv.config();
+process.env.UV_LINK_MODE = 'copy';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -265,8 +266,10 @@ export default defineConfig(async ({ command }) => {
     console.log('Building static pages for production');
     try {
       if (process.env.VERCEL) {
-        process.env.UV_LINK_MODE = 'copy';
-        execSync('pip3 install -r requirements.txt --break-system-packages', { stdio: 'inherit' });
+        execSync('export UV_LINK_MODE=copy && pip3 install -r requirements.txt --break-system-packages', {
+          stdio: 'inherit',
+          env: { ...process.env, UV_LINK_MODE: 'copy' },
+        });
         execSync('python3 src/main.py', { stdio: 'inherit' });
       } else {
         const output = execSync(`${pythonExecutable} src/main.py`);
