@@ -27,25 +27,26 @@ site.theme.default is defined else (site.theme if site.theme is defined else "dr
 </head>
 
 <body class="min-h-screen flex flex-col overflow-x-hidden">
-  <div class="navbar bg-transparent fixed top-0 left-0 z-50 px-4 sm:px-8 py-1 flex items-center justify-between gap-4">
+  <div class="navbar bg-transparent fixed top-0 left-0 z-50 px-3 sm:px-8 py-1 flex items-center justify-between gap-2 sm:gap-4">
+    <!-- Left: Site Name -->
     <div class="flex-none">
-      <a href="/" class="btn btn-ghost text-xl sm:text-2xl font-extrabold tracking-tight px-2">{{ site.site_name }}</a>
+      <a href="/" class="btn btn-ghost text-lg sm:text-2xl font-extrabold tracking-tight px-1.5 sm:px-2">{{ site.site_name }}</a>
     </div>
 
     {% if posts and posts|length > 0 %}
-    <!-- Rotating Blog Post Notification (Top 3 Posts) -->
-    <div class="flex-1 max-w-xl hidden sm:flex items-center justify-center">
-      <a id="nav-blog-pill" href="{{ posts[0].url.rstrip('/') }}/" class="group flex items-center gap-2.5 px-3.5 py-1.5 rounded-lg bg-black/40 border border-white/15 hover:border-blue-400/50 hover:bg-black/60 transition-all duration-300 shadow-md">
-        <span class="flex h-2.5 w-2.5 relative shrink-0">
+    <!-- Middle: Rotating Blog Post Notification (Responsive) -->
+    <div class="flex-1 max-w-[190px] sm:max-w-xl flex items-center justify-center">
+      <a id="nav-blog-pill" href="{{ posts[0].url.rstrip('/') }}/" class="group flex items-center gap-1.5 sm:gap-2.5 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-lg bg-black/50 border border-white/15 hover:border-blue-400/50 hover:bg-black/70 transition-all duration-300 shadow-md max-w-full">
+        <span class="flex h-2 w-2 sm:h-2.5 sm:w-2.5 relative shrink-0">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 sm:h-2.5 sm:w-2.5 bg-blue-500"></span>
         </span>
-        <span class="text-xs sm:text-sm font-bold uppercase tracking-wider text-blue-400 shrink-0">Blog</span>
-        <span class="text-xs text-white/30 shrink-0">|</span>
-        <span id="nav-blog-title" class="text-sm sm:text-base text-gray-200 group-hover:text-white transition-opacity duration-300 truncate max-w-[260px] md:max-w-md font-semibold">
+        <span class="hidden xs:inline text-[11px] sm:text-xs font-bold uppercase tracking-wider text-blue-400 shrink-0">Blog</span>
+        <span class="hidden xs:inline text-xs text-white/30 shrink-0">|</span>
+        <span id="nav-blog-title" class="text-xs sm:text-base text-gray-200 group-hover:text-white transition-opacity duration-300 truncate font-semibold">
           {{ posts[0].title }}
         </span>
-        <span class="text-sm text-blue-400 group-hover:translate-x-0.5 transition-transform shrink-0">→</span>
+        <span class="text-xs sm:text-sm text-blue-400 group-hover:translate-x-0.5 transition-transform shrink-0">→</span>
       </a>
     </div>
 
@@ -80,12 +81,49 @@ site.theme.default is defined else (site.theme if site.theme is defined else "dr
     </script>
     {% endif %}
 
-    <div class="flex-none">
+    <!-- Right: Desktop full navigation list -->
+    <div class="hidden md:flex flex-none">
       <ul class="menu menu-horizontal px-1 gap-1 text-base">
         {% for item in site.navigation %}
-        <li><a href="{{ item.url }}" class="rounded-lg text-base font-semibold px-3 py-1.5 hover:text-blue-400 hover:bg-white/5 transition-colors">{{ item.name }}</a></li>
+        <li>
+          <a href="{{ item.url }}" class="rounded-lg text-base font-semibold px-3 py-1.5 {% if (page.url == item.url) or (item.url != '/' and page.url.startswith(item.url)) %}text-blue-400 bg-white/10{% else %}text-gray-200 hover:text-blue-400 hover:bg-white/5{% endif %} transition-colors">
+            {{ item.name }}
+          </a>
+        </li>
         {% endfor %}
       </ul>
+    </div>
+
+    <!-- Right: Mobile view (Current Page Badge + "..." Dropdown) -->
+    <div class="flex md:hidden flex-none items-center gap-1.5">
+      <!-- Current Page indicator -->
+      <span class="text-xs font-bold px-2 py-1 rounded-md bg-blue-500/20 text-blue-300 border border-blue-400/30 truncate max-w-[85px]">
+        {% if page.title and page.title != "Home" and page.title != site.site_name %}
+          {{ page.title }}
+        {% else %}
+          Home
+        {% endif %}
+      </span>
+
+      <!-- Dropdown menu (...) -->
+      <div class="dropdown dropdown-end">
+        <button tabindex="0" aria-label="Navigation Menu" class="btn btn-ghost btn-sm px-2 text-white hover:bg-white/10 rounded-lg text-lg font-extrabold tracking-widest leading-none">
+          •••
+        </button>
+        <ul tabindex="0" class="dropdown-content menu p-2 shadow-2xl bg-[#121226]/95 backdrop-blur-xl border border-white/20 rounded-xl w-48 mt-2 z-50 text-sm font-semibold space-y-1">
+          <li class="menu-title text-[11px] text-gray-400 uppercase tracking-wider px-2 py-1">Pages</li>
+          {% for item in site.navigation %}
+          <li>
+            <a href="{{ item.url }}" class="rounded-lg py-2 px-3 {% if (page.url == item.url) or (item.url != '/' and page.url.startswith(item.url)) %}bg-blue-600/30 text-blue-300 font-bold{% else %}text-gray-200 hover:text-white hover:bg-white/10{% endif %}">
+              {{ item.name }}
+              {% if (page.url == item.url) or (item.url != '/' and page.url.startswith(item.url)) %}
+                <span class="ml-auto text-blue-400 text-xs">●</span>
+              {% endif %}
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
   </div>
 
