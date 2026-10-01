@@ -2,16 +2,19 @@
 
 {% block content %}
 
-<div class="max-w-4xl mx-auto">
+<div class="max-w-4xl mx-auto w-full min-w-0">
 
   <div class="bg-black/25 
               backdrop-blur-sm
               border border-blue-500/20
               rounded-2xl 
-              p-8 md:p-12 
-              shadow-2xl">
+              p-4 sm:p-8 md:p-12 
+              shadow-2xl
+              min-w-0
+              max-w-full
+              overflow-hidden">
 
-    <article class="prose prose-invert max-w-none
+    <article class="prose prose-invert max-w-none min-w-0 w-full
                 prose-p:text-gray-200
                 prose-headings:text-white
                 prose-strong:text-white
@@ -67,5 +70,18 @@
   </div>
 
 </div>
+
+<script>
+(() => {
+  document.querySelectorAll(".prose table").forEach((table) => {
+    if (!table.parentElement.classList.contains("table-wrapper")) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "table-wrapper my-6 w-full max-w-full overflow-x-auto rounded-xl border border-white/10 bg-black/40 p-3 shadow-inner";
+      table.parentNode.insertBefore(wrapper, table);
+      wrapper.appendChild(table);
+    }
+  });
+})();
+</script>
 
 {% endblock %}

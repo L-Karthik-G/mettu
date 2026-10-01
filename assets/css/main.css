@@ -2,3 +2,35 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @import "./generated.daisyui.css";
+
+/* Ensure wide tables and code blocks scroll horizontally within bounds on mobile */
+.prose {
+  max-width: 100%;
+}
+
+.prose pre {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.prose table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-wrapper {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-wrapper table {
+  display: table;
+  width: 100%;
+  min-width: 580px;
+}
