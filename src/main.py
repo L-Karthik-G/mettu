@@ -80,30 +80,21 @@ def clean_output(directory):
         ".dockerignore",
         "Dockerfile",
     }
-    
-    preserved_files = {
-        "config.yaml",
-        "package.json",
-        "package-lock.json",
-        "requirements.txt",
-        "vite.config.mjs",
-        "README.md",
-        "LICENSE.md",
-        "CONTRIBUTING.md",
-        ".env",
-        ".env.example",
-        ".gitignore",
-    }
+
+    def is_preserved(item_name):
+        if item_name in preserved_roots:
+            return True
+        if item_name.startswith(".env") or item_name.startswith(".vercel"):
+            return True
+        if item_name.startswith(".") and item_name not in preserved_roots:
+            return True
+        return False
 
     for name in os.listdir(directory):
-        path = os.path.join(directory, name)
-        
-        if name in preserved_roots or name in preserved_files:
-            continue
-            
-        if name.startswith(".") and name not in preserved_roots:
+        if is_preserved(name):
             continue
 
+        path = os.path.join(directory, name)
         try:
             if os.path.isfile(path) or os.path.islink(path):
                 os.remove(path)
@@ -238,7 +229,6 @@ def normalize_theme_config(config):
 
 def write_theme_file(config, output_path=GENERATED_THEME_PATH):
     theme = config.get("theme") or {}
-    print(f"DEBUG: write_theme_file theme config: {theme}")
     include = theme.get("include") or []
     include_list = _ensure_sequence(include)
 
@@ -578,6 +568,72 @@ def load_templates(env, template_dir=TEMPLATE_DIR, allowed_extensions=(".html", 
     return templates
 
 
+def normalize_image_url(url):
+    if not url:
+        return None
+    url = url.strip().strip('\'"')
+    if "assets/" in url:
+        idx = url.find("assets/")
+        return "/" + url[idx:]
+    if not url.startswith("/") and not url.startswith("http"):
+        return "/" + url
+    return url
+
+
+def extract_first_image(markdown_text):
+    if not markdown_text:
+        return None
+    md_img_pattern = r'!\[.*?\]\(([\'"]?)(.*?)\1(?:\s+["\'].*?["\'])?\)'
+    match = re.search(md_img_pattern, markdown_text)
+    if match:
+        normalized = normalize_image_url(match.group(2))
+        if normalized:
+            return normalized
+
+    html_img_pattern = r'<img\s+[^>]*?src=[\'"]([^\'"]+)[\'"]'
+    match = re.search(html_img_pattern, markdown_text, re.IGNORECASE)
+    if match:
+        normalized = normalize_image_url(match.group(1))
+        if normalized:
+            return normalized
+
+    return None
+
+
+def extract_description(markdown_text, max_len=160):
+    if not markdown_text:
+        return ""
+    text = markdown_text
+    text = re.sub(r'```.*?```', '', text, flags=re.DOTALL)
+    text = re.sub(r'\$\$.*?\$\$', '', text, flags=re.DOTALL)
+    text = re.sub(r'\$.*?\$', '', text)
+    text = re.sub(r'\\\[.*?\\\]', '', text, flags=re.DOTALL)
+    text = re.sub(r'\\\(.*?\\\)', '', text)
+    text = re.sub(r'!\[.*?\]\(.*?\)', '', text)
+    text = re.sub(r'<img[^>]*?>', '', text)
+    text = re.sub(r'^#+\s+.*$', '', text, flags=re.MULTILINE)
+    text = re.sub(r'<[^>]+>', '', text)
+    text = re.sub(r'\[([^\]]+)\]\([^\)]+\)', r'\1', text)
+    text = re.sub(r'[*_]{1,3}([^*_]+)[*_]{1,3}', r'\1', text)
+
+    for p in text.split('\n\n'):
+        p_clean = re.sub(r'^[>\-\*\d\.\s]+', '', p.strip()).strip()
+        p_clean = ' '.join(p_clean.split())
+        if len(p_clean) > 25:
+            if len(p_clean) > max_len:
+                return p_clean[:max_len].rsplit(' ', 1)[0] + '...'
+            return p_clean
+    return ""
+
+
+def calculate_reading_time(text):
+    if not text:
+        return "1 min read"
+    words = len(re.findall(r'\b\w+\b', text))
+    minutes = max(1, round(words / 200))
+    return f"{minutes} min read"
+
+
 def parse_file(filepath, pygments_theme, markdown_config=None):
     try:
         with open(filepath, "r", encoding="utf-8") as f:
@@ -628,8 +684,15 @@ def parse_file(filepath, pygments_theme, markdown_config=None):
         parsed_date = safe_parse_date(page_config["date"])
         if parsed_date:
             page_config["date"] = parsed_date.strftime("%Y-%m-%d")
-        else:
-            pass
+
+    # Extract image, description, and reading time
+    if not page_config.get("image"):
+        page_config["image"] = extract_first_image(markdown_data)
+
+    if not page_config.get("description"):
+        page_config["description"] = extract_description(markdown_data)
+
+    page_config["reading_time"] = calculate_reading_time(markdown_data)
 
     return page_config, html_data
 
@@ -940,7 +1003,8 @@ def main():
         sitemap_list = []
         all_posts = []
         pages = []
-        tags = {}
+        tag_canonical_names = {}
+        tags = defaultdict(list)
 
         clean_output(OUTPUT_DIR)
 
@@ -971,15 +1035,30 @@ def main():
                 current_slugs.add(slug_key)
 
                 pages.append({"data": page_data, "content": html_content})
-                sitemap_list.append(page_data["url"])
+                sitemap_list.append({
+                    "url": page_data["url"],
+                    "lastmod": page_data.get("date") or datetime.now().strftime("%Y-%m-%d"),
+                })
                 
                 layout = page_data.get("layout")
                 if layout:
                     collections[layout].append(page_data)
                     
                     if layout == "post":
-                        for tag in page_data.get("tags") or []:
-                             tags.setdefault(tag, []).append(page_data)
+                        raw_tags = page_data.get("tags") or []
+                        normalized_post_tags = []
+                        for raw_tag in raw_tags:
+                            clean_tag = str(raw_tag).strip()
+                            if not clean_tag:
+                                continue
+                            tag_key = clean_tag.lower()
+                            if tag_key not in tag_canonical_names:
+                                tag_canonical_names[tag_key] = clean_tag
+                            canonical_tag = tag_canonical_names[tag_key]
+                            if canonical_tag not in normalized_post_tags:
+                                normalized_post_tags.append(canonical_tag)
+                            tags[canonical_tag].append(page_data)
+                        page_data["tags"] = normalized_post_tags
 
         removed = previous_slugs - current_slugs
         for slug in removed:
@@ -1036,14 +1115,18 @@ def main():
                 tags,
                 image_manifest=image_manifest,
             )
+            for tag_name in tags.keys():
+                sitemap_list.append({
+                    "url": f"/tags/{tag_name}.html",
+                    "lastmod": datetime.now().strftime("%Y-%m-%d"),
+                })
         else:
             print("Warning: tags template not found; skipping tag page generation.")
 
         sitemap_template = env.get_template("sitemap.xml.j2")
         sitemap_xml = sitemap_template.render(site=site_config, pages=sitemap_list)
-        sitemap_xml = sitemap_template.render(site=site_config, pages=sitemap_list)
         try:
-            with open(os.path.join(OUTPUT_DIR, "sitemap.xml"), "w") as f:
+            with open(os.path.join(OUTPUT_DIR, "sitemap.xml"), "w", encoding="utf-8") as f:
                 f.write(sitemap_xml)
             print("Generated sitemap.xml")
         except OSError as e:

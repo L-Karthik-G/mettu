@@ -11,6 +11,8 @@ site.theme.default is defined else (site.theme if site.theme is defined else "dr
   <link rel="stylesheet" href="/assets/css/syntax.css">
   <link rel="icon" type="image/svg+xml" href="/templates/icons/icon.svg">
 
+  <meta name="description" content="{{ page.description | default(site.site_name ~ ' - Portfolio & Articles by Karthik Gollapudi') }}">
+
   <style>
     html {
       scroll-behavior: smooth;
@@ -22,19 +24,66 @@ site.theme.default is defined else (site.theme if site.theme is defined else "dr
 
   <!-- Vanta NET effect -->
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
-
-  
 </head>
 
 <body class="min-h-screen flex flex-col overflow-x-hidden">
-  <div class="navbar bg-transparent fixed top-0 left-0 z-50 backdrop-blur-md">
-    <div class="flex-1">
-      <a href="/" class="btn btn-ghost text-xl">{{ site.site_name }}</a>
-    </div>
+  <div class="navbar bg-transparent fixed top-0 left-0 z-50 px-4 sm:px-8 py-1 flex items-center justify-between gap-4">
     <div class="flex-none">
-      <ul class="menu menu-horizontal px-1">
+      <a href="/" class="btn btn-ghost text-xl sm:text-2xl font-extrabold tracking-tight px-2">{{ site.site_name }}</a>
+    </div>
+
+    {% if posts and posts|length > 0 %}
+    <!-- Rotating Blog Post Notification (Top 3 Posts) -->
+    <div class="flex-1 max-w-xl hidden sm:flex items-center justify-center">
+      <a id="nav-blog-pill" href="{{ posts[0].url.rstrip('/') }}/" class="group flex items-center gap-2.5 px-3.5 py-1.5 rounded-lg bg-black/40 border border-white/15 hover:border-blue-400/50 hover:bg-black/60 transition-all duration-300 shadow-md">
+        <span class="flex h-2.5 w-2.5 relative shrink-0">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
+        </span>
+        <span class="text-xs sm:text-sm font-bold uppercase tracking-wider text-blue-400 shrink-0">Blog</span>
+        <span class="text-xs text-white/30 shrink-0">|</span>
+        <span id="nav-blog-title" class="text-sm sm:text-base text-gray-200 group-hover:text-white transition-opacity duration-300 truncate max-w-[260px] md:max-w-md font-semibold">
+          {{ posts[0].title }}
+        </span>
+        <span class="text-sm text-blue-400 group-hover:translate-x-0.5 transition-transform shrink-0">→</span>
+      </a>
+    </div>
+
+    <script>
+    (() => {
+      const topPosts = [
+        {% for p in posts[:3] %}
+        {
+          title: {{ p.title | tojson }},
+          url: {{ (p.url.rstrip('/') ~ '/') | tojson }}
+        },
+        {% endfor %}
+      ];
+
+      if (topPosts.length > 1) {
+        let currentIndex = 0;
+        const pill = document.getElementById("nav-blog-pill");
+        const titleEl = document.getElementById("nav-blog-title");
+
+        setInterval(() => {
+          if (!pill || !titleEl) return;
+          titleEl.style.opacity = "0";
+          setTimeout(() => {
+            currentIndex = (currentIndex + 1) % topPosts.length;
+            titleEl.textContent = topPosts[currentIndex].title;
+            pill.href = topPosts[currentIndex].url;
+            titleEl.style.opacity = "1";
+          }, 350);
+        }, 6000);
+      }
+    })();
+    </script>
+    {% endif %}
+
+    <div class="flex-none">
+      <ul class="menu menu-horizontal px-1 gap-1 text-base">
         {% for item in site.navigation %}
-        <li><a href="{{ item.url }}">{{ item.name }}</a></li>
+        <li><a href="{{ item.url }}" class="rounded-lg text-base font-semibold px-3 py-1.5 hover:text-blue-400 hover:bg-white/5 transition-colors">{{ item.name }}</a></li>
         {% endfor %}
       </ul>
     </div>
@@ -44,33 +93,65 @@ site.theme.default is defined else (site.theme if site.theme is defined else "dr
 
 <main class="relative z-10 min-h-screen container mx-auto p-8 pt-32">
     {% block content %}{% endblock %}
-    
 </main>
 
-  <!-- Vanta INIT (must be after content exists) -->
+  <!-- Vanta INIT with tab switching optimization -->
   <script>
-window.addEventListener('DOMContentLoaded', () => {
-  VANTA.NET({
-    el: "#vanta-bg",
-    mouseControls: true,
-    touchControls: true,
-    gyroControls: false,
-    minHeight: 200.0,
-    minWidth: 200.0,
-    scale: 1.0,
-    scaleMobile: 1.0,
-    color: 0x3f83f8,
-    // Change this to match your dark navy background (e.g., 0x05051e)
-    backgroundColor: 0x05051e, 
-    points: 10.0,
-    maxDistance: 20.0,
-    spacing: 15.0
-  })
-})
-  </script> 
+(() => {
+  let vantaEffect = null;
+  let isVantaPaused = false;
 
-  <!--sum stuff to comit
-   -->
+  function initVanta() {
+    if (typeof VANTA === 'undefined' || typeof VANTA.NET !== 'function') return;
+    try {
+      vantaEffect = VANTA.NET({
+        el: "#vanta-bg",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.0,
+        minWidth: 200.0,
+        scale: 1.0,
+        scaleMobile: 1.0,
+        color: 0x3f83f8,
+        backgroundColor: 0x05051e,
+        points: 9.0,
+        maxDistance: 19.0,
+        spacing: 18.0
+      });
+    } catch (e) {
+      console.warn("Vanta.js background could not be initialized:", e);
+    }
+  }
 
+  window.addEventListener('DOMContentLoaded', initVanta);
+
+  // Eliminate tab switching lag: pause animation loop when hidden, resume with fresh timestamp when visible
+  document.addEventListener('visibilitychange', () => {
+    if (!vantaEffect) return;
+    if (document.hidden) {
+      if (vantaEffect.req) {
+        window.cancelAnimationFrame(vantaEffect.req);
+        vantaEffect.req = null;
+        isVantaPaused = true;
+      }
+    } else if (isVantaPaused) {
+      vantaEffect.prevNow = performance.now();
+      vantaEffect.animationLoop();
+      isVantaPaused = false;
+    }
+  });
+
+  // Cleanup WebGL context on pagehide/unload to prevent leaks
+  window.addEventListener('pagehide', () => {
+    if (vantaEffect && typeof vantaEffect.destroy === 'function') {
+      try {
+        vantaEffect.destroy();
+      } catch (e) {}
+      vantaEffect = null;
+    }
+  });
+})();
+  </script>
 </body>
 </html>

@@ -32,7 +32,9 @@ function getS3Client() {
             secretAccessKey: process.env.S3_SECRET_KEY,
         },
         requestHandler: new NodeHttpHandler({
-            httpsAgent: new https.Agent({ rejectUnauthorized: false })
+            httpsAgent: new https.Agent({
+                rejectUnauthorized: process.env.NODE_TLS_REJECT_UNAUTHORIZED !== '0'
+            })
         }),
         forcePathStyle: true // Needed for some S3-compatible providers like MinIO
     });

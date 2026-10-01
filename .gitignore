@@ -1,15 +1,57 @@
-package-lock.json
-/node_modules
-/node_modules/*
-/assets/images/*
-
+# Environment variables & API keys
 .env
+.env.local
+.env.*.local
+.env.*
+!.env.example
 
+# Credentials & secrets
+*.pem
+*.key
+*.cert
+*.crt
+
+# Vercel & cloud deployment artifacts
+.vercel
+.vercel_build_output
+
+# Dependencies
+node_modules/
+package-lock.json
+
+# Python virtual environment & caches
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Build outputs
+dist/
+.cache/
+/assets/images-processed/
+
+# Generated SSG files in root (dev server)
+/index.html
+/about/
+/blog/
+/posts/
+/projects/
+/tags/
+/sitemap.xml
+
+# Generated CSS files
 /assets/css/syntax.css
 /assets/css/generated.daisyui.css
 /assets/css/generated.fonts.css
-.cache
-/assets/images-processed/
-.venv
-dist
-.venv/*
+
+# Preprocessed images raw input
+/assets/images/*
+!/assets/images/.gitkeep
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini

@@ -47,7 +47,7 @@ const resolvePythonExecutable = () => {
   }
 
   const venvPythonBin = path.join(__dirname, '.venv/bin/python');
-  const venvPythonScripts = path.join(__dirname, '.venv/bin/python');
+  const venvPythonScripts = path.join(__dirname, '.venv/Scripts/python.exe');
 
   if (process.platform === 'win32') {
     if (fs.existsSync(venvPythonScripts)) return venvPythonScripts;
@@ -164,6 +164,17 @@ const py_build_plugin = () => {
   return {
     name: 'builder-ssg',
     closeBundle() {
+      const sitemapSrc = path.join(__dirname, 'sitemap.xml');
+      const sitemapDist = path.join(__dirname, 'dist', 'sitemap.xml');
+      if (fs.existsSync(sitemapSrc)) {
+        try {
+          fs.copyFileSync(sitemapSrc, sitemapDist);
+          console.log('[build] Emitted sitemap.xml to dist/');
+        } catch (err) {
+          console.warn('[build] Could not copy sitemap.xml to dist/:', err.message);
+        }
+      }
+
       console.log('Cleaning up root directory...');
       try {
         const output = execSync(`"${pythonExecutable}" src/main.py --clean`);

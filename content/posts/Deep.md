@@ -4,7 +4,7 @@ date: "2026-04-29"
 layout: "post"
 tags:
     - "Science"
-    - "machine learning"
+    - "Machine Learning"
     - "Deep Learning"
     
 ---

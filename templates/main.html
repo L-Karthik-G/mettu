@@ -2,70 +2,42 @@
 
 {% block content %}
 
-  <div class="flex flex-col items-center text-center w-fit">
-    <div class="min-h-screen flex flex-col items-center justify-center px-4 -mt-10">
+  <div class="min-h-screen flex flex-col items-center justify-center px-4 -mt-10">
+    <div class="flex flex-col items-center text-center max-w-4xl mx-auto">
+      <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight">
+        Hello, I'm Karthik Gollapudi
+      </h1>
+      <p class="mt-4 text-lg md:text-2xl opacity-90">
+         It's a pleasure to introduce myself.
+      </p>
 
-      <div class="flex flex-col items-center text-center w-fit">
-        <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight">
-          Hello, I'm Karthik Gollapudi
-        </h1>
-        <p class="mt-4 text-lg md:text-2xl opacity-90">
-          I'm a first year Btech student, it's a pleasure to introduce myself.
-        </p>
-
-        <div class="mt-10 flex flex-wrap items-center justify-start gap-6">
-          <div class="flex items-center space-x-4">
-            {% for link in page.social_links %}
-              <a href="{{ link.url }}" class="group" aria-label="{{ link.name }}">
-                <div class="p-3 rounded-xl bg-black/10 backdrop-blur-sm border border-white/10 shadow-xl
-                            group-hover:-translate-y-2 transition-all duration-300">
-                  {% if link.icon %}
-                    {% include "icons/" ~ link.icon ~ ".svg" ignore missing %}
-                  {% endif %}
-                </div>
-              </a>
-            {% endfor %}
-          </div>
+      <div class="mt-10 flex flex-wrap items-center justify-center gap-6">
+        <div class="flex items-center space-x-4">
+          {% for link in page.social_links %}
+            <a href="{{ link.url }}" class="group" aria-label="{{ link.name }}" target="_blank" rel="noopener noreferrer">
+              <div class="p-3 rounded-xl bg-black/10 backdrop-blur-sm border border-white/10 shadow-xl
+                          group-hover:-translate-y-2 transition-all duration-300">
+                {% if link.icon %}
+                  {% include "icons/" ~ link.icon ~ ".svg" ignore missing %}
+                {% endif %}
+              </div>
+            </a>
+          {% endfor %}
         </div>
       </div>
+    </div>
 
-      <div class="mt-12 animate-bounce opacity-40">
-        {% include "icons/arrow-down.svg" ignore missing %}
-      </div>
-
+    <div class="mt-12 animate-bounce opacity-40">
+      {% include "icons/arrow-down.svg" ignore missing %}
     </div>
   </div>
 
-  <!-- Keep Up Section -->
+  <!-- Fun Stuff Section -->
   <div class="flex flex-col items-center px-4">
-    <h2 class="text-4xl md:text-6xl font-extrabold text-center mb-8">Keep Up</h2>
-
-    <!-- World Cup Tile -->
-    <div class="group mt-12 relative mx-auto w-full max-w-[480px] h-64 md:h-84 mb-8 bg-black/15 backdrop-blur-sm border border-white/20 hover:border-white/80 rounded-4xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden flex items-center justify-center">
-      <img src="/assets/for_web/wc_web.jpg" class="absolute inset-0 w-full h-full object-cover object-center opacity-70 md:opacity-45 md:group-hover:opacity-70 scale-140 rounded-2xl transition-all duration-300" />
-      <div class="relative z-10 flex flex-col items-center justify-center h-full w-full text-center">
-        <p class="-mt-4 text-sm md:text-2xl font-bold tracking-widest uppercase text-red-300 mb-4 whitespace-nowrap">FIFA World Cup 2026</p>
-        <div id="countdown" class="mt-4 text-3xl md:text-5xl font-bold text-white whitespace-nowrap"></div>
-      </div>
-    </div>
-
-    <script>
-      function updateCountdown() {
-        const worldCup = new Date("2026-06-11T00:00:00");
-        const now = new Date();
-        const diff = worldCup - now;
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const secs = Math.floor((diff % (1000 * 60)) / 1000);
-        document.getElementById("countdown").textContent = `${days}d ${hours}h ${mins}m ${secs}s`;
-      }
-      updateCountdown();
-      setInterval(updateCountdown, 1000);
-    </script>
+    <h2 class="text-4xl md:text-6xl font-extrabold text-center mb-8">Fun Stuff</h2>
 
     <!-- F1 Tile -->
-    <div class="group relative mx-auto w-full max-w-[480px] h-64 md:h-84 mb-8 bg-black/10 backdrop-blur-sm border border-white/20 hover:border-white/80 rounded-4xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden flex items-center justify-center">
+    <div class="group mt-12 relative mx-auto w-full max-w-[480px] h-64 md:h-84 mb-8 bg-black/10 backdrop-blur-sm border border-white/20 hover:border-white/80 rounded-4xl p-6 shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden flex items-center justify-center">
       <img
         src="assets/for_web/f1_default.jpg"
         class="absolute inset-0 w-full h-full object-cover opacity-70 md:opacity-45 md:group-hover:opacity-70 scale-100 transition-all duration-300"
@@ -79,34 +51,61 @@
     </div>
 
     <script>
-      let raceDate;
-      fetch("https://api.jolpi.ca/ergast/f1/2026.json")
-      .then(res => res.json())
-      .then(data => {
-        const races = data.MRData.RaceTable.Races;
-        const now = new Date();
-        const next = races.find(r => new Date(`${r.date}T${r.time}`) > now);
-        if (!next) return;
-        raceDate = new Date(`${next.date}T${next.time}`);
-        document.getElementById("f1-race-name").textContent = next.raceName;
-        document.getElementById("f1-location").textContent =
-          `${next.Circuit.Location.locality}, ${next.Circuit.Location.country}`;
-      });
+      let raceDate = null;
+
+      async function fetchNextRace() {
+        const curYear = new Date().getFullYear();
+        const endpoints = [
+          "https://api.jolpi.ca/ergast/f1/current.json",
+          `https://api.jolpi.ca/ergast/f1/${curYear}.json`,
+          "https://api.jolpi.ca/ergast/f1/2026.json"
+        ];
+
+        for (const url of endpoints) {
+          try {
+            const res = await fetch(url);
+            if (!res.ok) continue;
+            const data = await res.json();
+            const races = data?.MRData?.RaceTable?.Races;
+            if (!races || !races.length) continue;
+            const now = new Date();
+            const next = races.find(r => new Date(`${r.date}T${r.time || '00:00:00Z'}`) > now);
+            if (next) {
+              raceDate = new Date(`${next.date}T${next.time || '00:00:00Z'}`);
+              const nameEl = document.getElementById("f1-race-name");
+              const locEl = document.getElementById("f1-location");
+              if (nameEl) nameEl.textContent = next.raceName;
+              if (locEl) locEl.textContent = `${next.Circuit?.Location?.locality || ''}, ${next.Circuit?.Location?.country || ''}`;
+              updateF1Countdown();
+              return;
+            }
+          } catch (e) {}
+        }
+
+        const cdEl = document.getElementById("f1-countdown");
+        if (cdEl && !raceDate) {
+          cdEl.textContent = "Season Break / Stay Tuned 🏎️";
+        }
+      }
 
       function updateF1Countdown() {
         if (!raceDate) return;
         const now = new Date();
         const diff = raceDate - now;
+        const cdEl = document.getElementById("f1-countdown");
+        if (!cdEl) return;
         if (diff <= 0) {
-          document.getElementById("f1-countdown").textContent = "Race Underway 🏁";
+          cdEl.textContent = "Race Underway 🏁";
           return;
         }
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const secs = Math.floor((diff % (1000 * 60)) / 1000);
-        document.getElementById("f1-countdown").textContent = `${days}d ${hours}h ${mins}m ${secs}s`;
+        cdEl.textContent = `${days}d ${hours}h ${mins}m ${secs}s`;
       }
+
+      fetchNextRace();
       setInterval(updateF1Countdown, 1000);
     </script>
 
@@ -115,7 +114,7 @@
       <img src="assets/for_web/poke_bg.png" class="absolute inset-0 w-full h-full object-cover object-center opacity-55 md:opacity-35 md:group-hover:opacity-55 scale-140 rounded-2xl transition-all duration-300" />
       <div class="relative z-10 flex flex-col items-center justify-center h-full w-full text-center">
         <p class="-mt-4 text-xl md:text-3xl font-bold tracking-widest uppercase text-yellow-300 mb-4 whitespace-nowrap">Who's That Pokémon?</p>
-        <div class="mt-8 text-base text-lg font-bold text-yellow-300 ">Tap to Play ▶</div>
+        <div class="mt-8 text-base font-bold text-yellow-300">Tap to Play ▶</div>
       </div>
     </div>
 
@@ -221,20 +220,30 @@
       }
 
       async function fetchPokemonName(id) {
-        const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-        const data = await res.json();
-        return data.name.charAt(0).toUpperCase() + data.name.slice(1);
+        try {
+          const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+          if (!res.ok) throw new Error("API error");
+          const data = await res.json();
+          const raw = data.name || `Pokemon #${id}`;
+          return raw.split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+        } catch (e) {
+          return `Pokémon #${id}`;
+        }
       }
 
       async function nextPokemon() {
         pkAnswered = false;
-        document.getElementById('pk-next-btn').style.display = 'none';
-        document.getElementById('pk-feedback').textContent = '';
+        const nextBtn = document.getElementById('pk-next-btn');
+        const feedbackEl = document.getElementById('pk-feedback');
+        if (nextBtn) nextBtn.style.display = 'none';
+        if (feedbackEl) feedbackEl.textContent = '';
 
-        // Instantly snap to black — no transition so no colour flash between rounds
-        const spriteReset = document.getElementById('pk-sprite');
-        spriteReset.style.transition = 'none';
-        spriteReset.style.filter = 'brightness(0) drop-shadow(0 0 20px rgba(255,220,0,0.3))';
+        // Snap to black silhouette
+        const sprite = document.getElementById('pk-sprite');
+        if (sprite) {
+          sprite.style.transition = 'none';
+          sprite.style.filter = 'brightness(0) drop-shadow(0 0 20px rgba(255,220,0,0.3))';
+        }
 
         // Pick answer pokemon (avoid repeats if possible)
         let answerId;
@@ -251,43 +260,53 @@
         }
 
         // Load sprite
-        const sprite = document.getElementById('pk-sprite');
-        sprite.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${answerId}.png`;
+        if (sprite) {
+          sprite.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${answerId}.png`;
+        }
 
-        // Fetch all names in parallel
-        const ids = [answerId, ...wrongIds];
-        const names = await Promise.all(ids.map(fetchPokemonName));
-        const choices = shuffle(names.map((name, i) => ({ name, correct: i === 0 })));
+        try {
+          // Fetch names in parallel
+          const ids = [answerId, ...wrongIds];
+          const names = await Promise.all(ids.map(fetchPokemonName));
+          const choices = shuffle(names.map((name, i) => ({ name, correct: i === 0 })));
 
-        // Render choices
-        const choicesEl = document.getElementById('pk-choices');
-        choicesEl.innerHTML = '';
-        choices.forEach((choice, idx) => {
-          const tile = tileStyles[idx % 2];
-          const btn = document.createElement('button');
-          btn.textContent = choice.name;
-          btn.dataset.correct = choice.correct;
-          btn.dataset.tileIdx = idx % 2;
-          btn.style.cssText = `
-            background: ${tile.bg};
-            color: ${tile.color};
-            border: ${tile.border};
-            border-radius: 12px;
-            padding: 13px 8px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-            text-shadow: 0 1px 6px rgba(0,0,0,0.9);
-            backdrop-filter: blur(4px);
-            letter-spacing: 0.3px;
-          `;
-          btn.onmouseover = () => { if (!pkAnswered) btn.style.background = tile.hoverBg; };
-          btn.onmouseout = () => { if (!pkAnswered) btn.style.background = tile.bg; };
-          btn.onclick = () => handleAnswer(btn, choice.correct);
-          choicesEl.appendChild(btn);
-        });
+          // Render choices
+          const choicesEl = document.getElementById('pk-choices');
+          if (!choicesEl) return;
+          choicesEl.innerHTML = '';
+          choices.forEach((choice, idx) => {
+            const tile = tileStyles[idx % 2];
+            const btn = document.createElement('button');
+            btn.textContent = choice.name;
+            btn.dataset.correct = choice.correct;
+            btn.dataset.tileIdx = idx % 2;
+            btn.style.cssText = `
+              background: ${tile.bg};
+              color: ${tile.color};
+              border: ${tile.border};
+              border-radius: 12px;
+              padding: 13px 8px;
+              font-size: 13px;
+              font-weight: 700;
+              cursor: pointer;
+              transition: all 0.2s;
+              text-align: center;
+              text-shadow: 0 1px 6px rgba(0,0,0,0.9);
+              backdrop-filter: blur(4px);
+              letter-spacing: 0.3px;
+            `;
+            btn.onmouseover = () => { if (!pkAnswered) btn.style.background = tile.hoverBg; };
+            btn.onmouseout = () => { if (!pkAnswered) btn.style.background = tile.bg; };
+            btn.onclick = () => handleAnswer(btn, choice.correct);
+            choicesEl.appendChild(btn);
+          });
+        } catch (err) {
+          if (feedbackEl) {
+            feedbackEl.textContent = 'Could not load Pokémon. Tap NEXT to retry.';
+            feedbackEl.style.color = '#facc15';
+          }
+          if (nextBtn) nextBtn.style.display = 'inline-block';
+        }
       }
 
       function handleAnswer(btn, isCorrect) {
@@ -296,14 +315,16 @@
 
         // Reveal pokemon with brightness ramp
         const sprite = document.getElementById('pk-sprite');
-        sprite.style.transition = 'filter 0.6s ease';
-        sprite.style.filter = 'brightness(0.3) drop-shadow(0 0 20px rgba(255,220,0,0.5))';
-        setTimeout(() => {
-          sprite.style.filter = 'brightness(0.6) drop-shadow(0 0 25px rgba(255,220,0,0.6))';
+        if (sprite) {
+          sprite.style.transition = 'filter 0.6s ease';
+          sprite.style.filter = 'brightness(0.3) drop-shadow(0 0 20px rgba(255,220,0,0.5))';
           setTimeout(() => {
-            sprite.style.filter = 'brightness(1) drop-shadow(0 0 30px rgba(255,220,0,0.8))';
-          }, 200);
-        }, 150);
+            sprite.style.filter = 'brightness(0.6) drop-shadow(0 0 25px rgba(255,220,0,0.6))';
+            setTimeout(() => {
+              sprite.style.filter = 'brightness(1) drop-shadow(0 0 30px rgba(255,220,0,0.8))';
+            }, 200);
+          }, 150);
+        }
 
         // Highlight correct green, wrong red
         document.querySelectorAll('#pk-choices button').forEach(b => {
@@ -322,30 +343,38 @@
         const feedback = document.getElementById('pk-feedback');
         if (isCorrect) {
           pkScore++; pkStreak++;
-          feedback.textContent = pkStreak >= 3 ? `🔥 ${pkStreak} in a row!` : ' Correct!';
-          feedback.style.color = '#4ade80';
+          if (feedback) {
+            feedback.textContent = pkStreak >= 3 ? `🔥 ${pkStreak} in a row!` : ' Correct!';
+            feedback.style.color = '#4ade80';
+          }
           flashModal('rgba(74,222,128,0.15)');
         } else {
           pkStreak = 0;
-          feedback.textContent = 'Wrong!';
-          feedback.style.color = '#f87171';
+          if (feedback) {
+            feedback.textContent = 'Wrong!';
+            feedback.style.color = '#f87171';
+          }
           flashModal('rgba(248,113,113,0.15)');
         }
 
         updateScoreboard();
-        document.getElementById('pk-next-btn').style.display = 'inline-block';
+        const nextBtn = document.getElementById('pk-next-btn');
+        if (nextBtn) nextBtn.style.display = 'inline-block';
       }
 
       function flashModal(color) {
         const flash = document.getElementById('pk-flash');
+        if (!flash) return;
         flash.style.background = color;
         flash.style.opacity = '1';
-        setTimeout(() => flash.style.opacity = '0', 250);
+        setTimeout(() => { flash.style.opacity = '0'; }, 250);
       }
 
       function updateScoreboard() {
-        document.getElementById('pk-score-display').innerHTML = `Score: <b style="color:#4ade80;">${pkScore}</b>`;
-        document.getElementById('pk-streak-display').innerHTML = `Streak: <b style="color:#fb923c;">${pkStreak}</b>`;
+        const scoreEl = document.getElementById('pk-score-display');
+        const streakEl = document.getElementById('pk-streak-display');
+        if (scoreEl) scoreEl.innerHTML = `Score: <b style="color:#4ade80;">${pkScore}</b>`;
+        if (streakEl) streakEl.innerHTML = `Streak: <b style="color:#fb923c;">${pkStreak}</b>`;
       }
 
       function resetPokemonGame() {
@@ -356,11 +385,12 @@
 
       function openPokemonModal() {
         const modal = document.getElementById('pokemon-modal');
+        if (!modal) return;
         modal.style.opacity = '0';
         modal.style.transition = 'opacity 0.4s ease';
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
-        if (!pkAnswered && !document.getElementById('pk-choices').children.length) {
+        if (!pkAnswered && !document.getElementById('pk-choices')?.children?.length) {
           nextPokemon();
         }
         requestAnimationFrame(() => {
@@ -371,32 +401,46 @@
       }
 
       function closePokemonModal(event) {
-        // If triggered by overlay click, only close when clicking the overlay itself
         if (event && event.target !== document.getElementById('pokemon-modal')) return;
         const modal = document.getElementById('pokemon-modal');
+        if (!modal) return;
         modal.style.opacity = '0';
         setTimeout(() => {
           modal.style.display = 'none';
           document.body.style.overflow = '';
-          // Wipe everything so next open is a completely fresh game
           pkScore = 0; pkStreak = 0; pkSeen.clear(); pkAnswered = false;
           updateScoreboard();
-          document.getElementById('pk-choices').innerHTML = '';
-          document.getElementById('pk-feedback').textContent = '';
-          document.getElementById('pk-next-btn').style.display = 'none';
-          document.getElementById('pk-sprite').src = '';
+          const choicesEl = document.getElementById('pk-choices');
+          const feedbackEl = document.getElementById('pk-feedback');
+          const nextBtn = document.getElementById('pk-next-btn');
+          const sprite = document.getElementById('pk-sprite');
+          if (choicesEl) choicesEl.innerHTML = '';
+          if (feedbackEl) feedbackEl.textContent = '';
+          if (nextBtn) nextBtn.style.display = 'none';
+          if (sprite) sprite.src = '';
         }, 400);
       }
+
+      // Close modal on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          const modal = document.getElementById('pokemon-modal');
+          if (modal && modal.style.display === 'flex') {
+            closePokemonModal();
+          }
+        }
+      });
     </script>
 
   </div>
 
- <!-- ========================= -->
+<!-- ========================= -->
 <!-- Pikachu Cursor Easter Egg -->
 <!-- ========================= -->
 
 <img id="pikachu-follower"
 src="assets/for_web/pikachu_anim.gif"
+alt="Pikachu cursor follower"
 style="
 position:fixed;
 width:96px;
@@ -409,141 +453,119 @@ z-index:9999;
 ">
 
 <script>
+(() => {
+  const pika = document.getElementById("pikachu-follower");
+  if (!pika) return;
 
-const pika = document.getElementById("pikachu-follower")
+  const idleRadius = 120;
+  let mouse = { x: 200, y: 200 };
+  let pos = { x: 200, y: 200 };
+  let vel = { x: 0, y: 0 };
 
-const idleRadius = 120
+  let active = false;
+  let facingRight = true;
+  let currentState = "run";
 
-let mouse = {x:0,y:0}
-let pos = {x:200,y:200}
-let vel = {x:0,y:0}
+  const maxSpeed = 1;
+  const accel = 0.01;
+  const friction = 0.9;
 
-let active = false
-let facingRight = true
-let currentState = "run"
+  const runSprite = "assets/for_web/pikachu_anim.gif";
+  const idleSprite = "assets/for_web/pickahu_idle.gif";
+  const verticalSprite = "assets/for_web/pikachu_top.gif";
 
-const maxSpeed = 1
-const accel = 0.01
-const friction = 0.9
+  document.addEventListener("mousemove", (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+  });
 
-const runSprite = "assets/for_web/pikachu_anim.gif"
-const idleSprite = "assets/for_web/pickahu_idle.gif"
-const verticalSprite = "assets/for_web/pikachu_top.gif"
+  function updatePikachu() {
+    if (!active) return;
 
-document.addEventListener("mousemove",e=>{
-mouse.x = e.clientX
-mouse.y = e.clientY
-})
+    const dx = mouse.x - pos.x;
+    const dy = mouse.y - pos.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
 
-function updatePikachu(){
+    if (dist > 5) {
+      vel.x += (dx / dist) * accel;
+      vel.y += (dy / dist) * accel;
+    } else {
+      vel.x *= friction;
+      vel.y *= friction;
+    }
 
-if(!active) return
+    vel.x = Math.max(-maxSpeed, Math.min(maxSpeed, vel.x));
+    vel.y = Math.max(-maxSpeed, Math.min(maxSpeed, vel.y));
 
-let dx = mouse.x - pos.x
-let dy = mouse.y - pos.y
+    pos.x += vel.x;
+    pos.y += vel.y;
 
-let dist = Math.sqrt(dx*dx + dy*dy)
+    pika.style.left = `${pos.x}px`;
+    pika.style.top = `${pos.y}px`;
 
-if(dist > 5){
-vel.x += (dx/dist) * accel
-vel.y += (dy/dist) * accel
-}else{
-vel.x *= friction
-vel.y *= friction
-}
+    if (dist < idleRadius) {
+      vel.x *= 0.7;
+      vel.y *= 0.7;
+      if (currentState !== "idle") {
+        pika.src = idleSprite;
+        currentState = "idle";
+      }
+    } else {
+      if (Math.abs(vel.y) > Math.abs(vel.x)) {
+        if (currentState !== "vertical") {
+          pika.src = verticalSprite;
+          currentState = "vertical";
+        }
+        pika.style.transform = "scaleX(1)";
+      } else {
+        if (currentState !== "run") {
+          pika.src = runSprite;
+          currentState = "run";
+        }
+        if (vel.x > 0 && !facingRight) {
+          pika.style.transform = "scaleX(1)";
+          facingRight = true;
+        }
+        if (vel.x < 0 && facingRight) {
+          pika.style.transform = "scaleX(-1)";
+          facingRight = false;
+        }
+      }
+    }
 
-vel.x = Math.max(-maxSpeed,Math.min(maxSpeed,vel.x))
-vel.y = Math.max(-maxSpeed,Math.min(maxSpeed,vel.y))
+    requestAnimationFrame(updatePikachu);
+  }
 
-pos.x += vel.x
-pos.y += vel.y
+  function togglePikachu() {
+    active = !active;
+    if (active) {
+      pika.style.display = "block";
+      updatePikachu();
+    } else {
+      pika.style.display = "none";
+    }
+  }
 
-pika.style.left = pos.x + "px"
-pika.style.top = pos.y + "px"
+  document.addEventListener("keydown", (e) => {
+    if (e.shiftKey && (e.key === "P" || e.key === "p")) {
+      togglePikachu();
+    }
+  });
 
-if(dist < idleRadius){
+  let secret = "";
+  const code = "pikachu";
 
-vel.x *= 0.7
-vel.y *= 0.7
-
-if(currentState !== "idle"){
-pika.src = idleSprite
-currentState = "idle"
-}
-
-}else{
-
-if(Math.abs(vel.y) > Math.abs(vel.x)){
-
-if(currentState !== "vertical"){
-pika.src = verticalSprite
-currentState = "vertical"
-}
-
-pika.style.transform = "scaleX(1)"
-
-}else{
-
-if(currentState !== "run"){
-pika.src = runSprite
-currentState = "run"
-}
-
-if(vel.x > 0 && !facingRight){
-pika.style.transform = "scaleX(1)"
-facingRight = true
-}
-
-if(vel.x < 0 && facingRight){
-pika.style.transform = "scaleX(-1)"
-facingRight = false
-}
-
-}
-
-}
-
-requestAnimationFrame(updatePikachu)
-
-}
-
-function togglePikachu(){
-
-active = !active
-
-if(active){
-pika.style.display = "block"
-updatePikachu()
-}else{
-pika.style.display = "none"
-}
-
-}
-
-document.addEventListener("keydown",e=>{
-if(e.shiftKey && e.key === "P"){
-togglePikachu()
-}
-})
-
-let secret = ""
-const code = "pikachu"
-
-document.addEventListener("keydown",e=>{
-
-secret += e.key.toLowerCase()
-
-if(secret.length > code.length){
-secret = secret.slice(-code.length)
-}
-
-if(secret === code){
-togglePikachu()
-secret = ""
-}
-
-})
-
+  document.addEventListener("keydown", (e) => {
+    secret += e.key.toLowerCase();
+    if (secret.length > code.length) {
+      secret = secret.slice(-code.length);
+    }
+    if (secret === code) {
+      togglePikachu();
+      secret = "";
+    }
+  });
+})();
 </script>
 
 {% endblock %}
