@@ -117,27 +117,30 @@ site.theme.default is defined else (site.theme if site.theme is defined else "dr
       {% set current_nav.name = 'Blog' %}
     {% endif %}
 
-    <!-- Right on Mobile: Current page + ... dropdown menu -->
+    <!-- Right on Mobile: Current page with ... underneath (No box, clean dropdown table) -->
     <div class="relative md:hidden flex-none">
-      <details id="mobile-nav-dropdown" class="dropdown dropdown-end">
-        <summary tabindex="0" role="button" class="btn btn-ghost btn-sm h-9 px-3 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 flex items-center gap-2 text-sm font-semibold text-gray-200 list-none [&::-webkit-details-marker]:hidden cursor-pointer select-none">
-          <span class="text-blue-400 font-bold">{{ current_nav.name }}</span>
-          <span class="text-white/30 text-xs">|</span>
-          <span class="tracking-widest text-base font-bold text-gray-300 leading-none">...</span>
-        </summary>
-        <ul tabindex="0" class="dropdown-content menu p-2 mt-2 shadow-2xl bg-black/85 backdrop-blur-xl border border-white/15 rounded-2xl w-44 z-[60] space-y-1">
+      <button id="mobile-nav-toggle" type="button" class="flex flex-col items-end justify-center py-1 px-1.5 focus:outline-none cursor-pointer group bg-transparent border-0 select-none" aria-label="Open page navigation menu" aria-expanded="false">
+        <span class="text-sm font-bold text-blue-400 group-hover:text-blue-300 leading-tight tracking-wide">{{ current_nav.name }}</span>
+        <span class="text-lg tracking-[0.25em] font-extrabold text-gray-300 group-hover:text-white leading-none -mt-0.5">...</span>
+      </button>
+
+      <!-- Dropdown table / menu -->
+      <div id="mobile-nav-menu" class="hidden absolute right-0 top-full mt-2 w-52 rounded-2xl bg-black/90 backdrop-blur-2xl border border-white/20 shadow-2xl overflow-hidden z-[999] divide-y divide-white/10">
+        <div class="px-4 py-2 bg-white/5 flex items-center justify-between text-xs font-bold uppercase tracking-wider text-gray-300">
+          <span>Navigate</span>
+          <span class="text-blue-400 text-xs">●</span>
+        </div>
+        <div class="p-1.5 space-y-1">
           {% for item in site.navigation %}
-          <li>
-            <a href="{{ item.url }}" class="flex items-center justify-between px-3 py-2 rounded-xl text-sm font-semibold transition-colors {% if item.name == current_nav.name %}text-blue-400 bg-white/10{% else %}text-gray-200 hover:text-blue-400 hover:bg-white/5{% endif %}">
-              <span>{{ item.name }}</span>
-              {% if item.name == current_nav.name %}
-              <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
-              {% endif %}
-            </a>
-          </li>
+          <a href="{{ item.url }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors {% if item.name == current_nav.name %}text-blue-400 bg-white/10{% else %}text-gray-200 hover:text-blue-400 hover:bg-white/5 active:bg-white/10{% endif %}">
+            <span>{{ item.name }}</span>
+            {% if item.name == current_nav.name %}
+            <span class="text-[11px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30 font-medium">Current</span>
+            {% endif %}
+          </a>
           {% endfor %}
-        </ul>
-      </details>
+        </div>
+      </div>
     </div>
 
     <!-- Right on Desktop: Standard horizontal links -->
@@ -155,12 +158,37 @@ site.theme.default is defined else (site.theme if site.theme is defined else "dr
   </div>
 
   <script>
-  document.addEventListener('click', (e) => {
-    const details = document.getElementById('mobile-nav-dropdown');
-    if (details && details.open && !details.contains(e.target)) {
-      details.removeAttribute('open');
-    }
-  });
+  (() => {
+    const toggleBtn = document.getElementById('mobile-nav-toggle');
+    const menu = document.getElementById('mobile-nav-menu');
+    if (!toggleBtn || !menu) return;
+
+    toggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isHidden = menu.classList.contains('hidden');
+      if (isHidden) {
+        menu.classList.remove('hidden');
+        toggleBtn.setAttribute('aria-expanded', 'true');
+      } else {
+        menu.classList.add('hidden');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!menu.contains(e.target) && !toggleBtn.contains(e.target)) {
+        menu.classList.add('hidden');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    menu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        menu.classList.add('hidden');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+      });
+    });
+  })();
   </script>
 
 <div id="vanta-bg" class="fixed inset-0 w-full h-full -z-10 pointer-events-none"></div>
