@@ -107,7 +107,7 @@ site.theme.default is defined else (site.theme if site.theme is defined else "dr
       <ul class="flex items-center gap-1 sm:gap-2 flex-nowrap whitespace-nowrap text-sm sm:text-base font-semibold">
         {% for item in site.navigation %}
         <li>
-          <a href="{{ item.url }}" class="rounded-lg px-2.5 sm:px-3 py-1.5 {% if (page.url == item.url) or (item.url != '/' and page.url.startswith(item.url)) %}text-blue-400 bg-white/10{% else %}text-gray-200 hover:text-blue-400 hover:bg-white/5{% endif %} transition-colors">
+          <a href="{{ item.url }}" class="rounded-lg px-2.5 sm:px-3 py-1.5 {% if page and page.url is defined and ((page.url == item.url) or (item.url != '/' and page.url.startswith(item.url))) %}text-blue-400 bg-white/10{% else %}text-gray-200 hover:text-blue-400 hover:bg-white/5{% endif %} transition-colors">
             {{ item.name }}
           </a>
         </li>

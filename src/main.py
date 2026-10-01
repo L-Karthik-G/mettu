@@ -713,7 +713,7 @@ def tag_pages(tag_template, site_config, tags=None, image_manifest=None):
             site=site_config,
             tag_name=tag_name,
             posts=posts_with_tag,
-            page={"title": f"Tag: {tag_name}"},
+            page={"title": f"Tag: {tag_name}", "url": f"/tags/{tag_name}"},
         )
         tag_page_html = replace_images_with_processed(tag_page_html, image_manifest)
         output_path = os.path.join(tags_dir, f"{tag_name}.html")

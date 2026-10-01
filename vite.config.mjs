@@ -265,6 +265,7 @@ export default defineConfig(async ({ command }) => {
     console.log('Building static pages for production');
     try {
       if (process.env.VERCEL) {
+        process.env.UV_LINK_MODE = 'copy';
         execSync('pip3 install -r requirements.txt --break-system-packages', { stdio: 'inherit' });
         execSync('python3 src/main.py', { stdio: 'inherit' });
       } else {
