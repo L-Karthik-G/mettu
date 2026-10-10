@@ -81,5 +81,10 @@ navigation:
     url: "/projects/"
   - name: "Blog"
     url: "/blog/"
+  - name: "TIL"
+    url: "/til/"
   - name: "About"
     url: "/about/"
+
+
+

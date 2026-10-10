@@ -35,6 +35,13 @@ GENERATED_FONTS_PATH = "assets/css/generated.fonts.css"
 GENERATED_SYNTAX_PATH = "assets/css/syntax.css"
 
 
+def slugify(text):
+    text = str(text or "").strip().lower()
+    text = re.sub(r'[\s_]+', '-', text)
+    text = re.sub(r'[^\w\-]', '', text)
+    return text.strip('-') or 'general'
+
+
 def load_previous_slugs():
     try:
         with open(PAGE_SLUG_CACHE, "r", encoding="utf-8") as f:
@@ -634,7 +641,7 @@ def calculate_reading_time(text):
     return f"{minutes} min read"
 
 
-def parse_file(filepath, pygments_theme, markdown_config=None):
+def parse_file(filepath, pygments_theme, markdown_config=None, site_config=None):
     try:
         with open(filepath, "r", encoding="utf-8") as f:
             file_content = f.read()
@@ -671,13 +678,36 @@ def parse_file(filepath, pygments_theme, markdown_config=None):
     # Normalize Windows paths
     url_path = url_path.replace(os.sep, "/")
 
-    if url_path == "index":
-        page_config["url"] = "/"
-    elif url_path.endswith("/index"):
-        # e.g. sub/index -> /sub/
-        page_config["url"] = "/" + url_path[:-5]
-    else:
-        page_config["url"] = "/" + url_path
+    if "url" not in page_config:
+        if url_path == "index":
+            page_config["url"] = "/"
+        elif url_path.endswith("/index"):
+            # e.g. sub/index -> /sub/
+            page_config["url"] = "/" + url_path[:-5]
+        else:
+            page_config["url"] = "/" + url_path
+
+    # Special handling for TIL files
+    norm_rel = rel_path.replace(os.sep, "/")
+    is_til_file = (
+        norm_rel.startswith("til/")
+        or (norm_rel.startswith("til") and norm_rel != "til.md")
+        or page_config.get("layout") in ("til_post",)
+    )
+    if is_til_file and norm_rel != "til.md" and url_path != "til":
+        if not page_config.get("layout"):
+            page_config["layout"] = "til_post"
+
+        file_slug = slugify(os.path.splitext(os.path.basename(filepath))[0])
+        page_config["url"] = f"/til/{file_slug}/"
+
+        topic = page_config.get("topic") or page_config.get("category")
+        if not topic:
+            parts = norm_rel.split("/")
+            if len(parts) > 2:
+                topic = parts[1].replace("-", " ").title()
+        page_config["topic"] = topic
+        page_config["category"] = topic
 
     # Normalize date to YYYY-MM-DD string
     if "date" in page_config and page_config["date"]:
@@ -725,6 +755,9 @@ def tag_pages(tag_template, site_config, tags=None, image_manifest=None):
             print(f"Error: Failed to write tag page {output_path}: {e}")
 
 
+
+
+
 def render_page(
     page_config,
     html_data,
@@ -753,7 +786,7 @@ def render_page(
         output_path = os.path.join(OUTPUT_DIR, "index.html")
     else:
         output_path = os.path.join(
-            OUTPUT_DIR, page_config["url"].lstrip("/"), "index.html"
+            OUTPUT_DIR, page_config["url"].strip("/"), "index.html"
         )
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
@@ -987,7 +1020,7 @@ def main():
             )
 
         page_data, html_content = parse_file(
-            args.file, pygments_theme, site_config.get("markdown")
+            args.file, pygments_theme, site_config.get("markdown"), site_config
         )
         if page_data is None or html_content is None:
             return
@@ -1021,7 +1054,7 @@ def main():
                 
                 filepath = os.path.join(root, filename)
                 page_data, html_content = parse_file(
-                    filepath, pygments_theme, site_config.get("markdown")
+                    filepath, pygments_theme, site_config.get("markdown"), site_config
                 )
                 if not page_data:
                     continue
@@ -1092,10 +1125,27 @@ def main():
             else:
                  pass
 
+        # Collect and sort TIL posts
+        til_posts = []
+        for p in pages:
+            p_data = p["data"]
+            layout = p_data.get("layout")
+            url = p_data.get("url", "")
+            if (layout in ("til_post", "til") and url != "/til") or (url.startswith("/til/") and url != "/til"):
+                til_posts.append(p_data)
+
+        til_posts.sort(
+            key=lambda x: safe_parse_date(x.get("date")) or datetime.min,
+            reverse=True,
+        )
+
         context_data = {}
         for k, v in collections.items():
             w = k.replace("-", "_") + "s"
             context_data[w] = v
+
+        context_data["til_posts"] = til_posts
+        context_data["tils"] = til_posts
 
         for page in pages:
             render_page(

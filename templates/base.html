@@ -41,68 +41,6 @@ site.theme.default is defined else (site.theme if site.theme is defined else "dr
         <a href="/" class="btn btn-ghost text-xl sm:text-2xl font-extrabold tracking-tight px-2">{{ site.site_name }}</a>
       </div>
 
-      {% if posts and posts|length > 0 %}
-      <!-- Middle: Rotating Blog Post Notification (Desktop only, hidden on mobile) -->
-      <div class="flex-1 max-w-xl hidden md:flex items-center justify-center">
-        <a id="nav-blog-pill" href="{{ posts[0].url.rstrip('/') }}/" class="group flex items-center gap-2.5 px-3.5 py-1.5 rounded-lg bg-black/40 border border-white/15 hover:border-blue-400/50 hover:bg-black/60 transition-all duration-300 shadow-md">
-          <span class="flex h-2.5 w-2.5 relative shrink-0">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
-          </span>
-          <span class="text-xs sm:text-sm font-bold uppercase tracking-wider text-blue-400 shrink-0">Blog</span>
-          <span class="text-xs text-white/30 shrink-0">|</span>
-          <span id="nav-blog-title" class="text-sm sm:text-base text-gray-200 group-hover:text-white transition-opacity duration-300 truncate max-w-[260px] md:max-w-md font-semibold">
-            {{ posts[0].title }}
-          </span>
-          <span class="text-sm text-blue-400 group-hover:translate-x-0.5 transition-transform shrink-0">→</span>
-        </a>
-      </div>
-
-      <script>
-      (() => {
-        const topPosts = [
-          {% for p in posts[:3] %}
-          {
-            title: {{ p.title | tojson }},
-            url: {{ (p.url.rstrip('/') ~ '/') | tojson }}
-          },
-          {% endfor %}
-        ];
-
-        if (topPosts.length > 1) {
-          let currentIndex = 0;
-          const pill = document.getElementById("nav-blog-pill");
-          const titleEl = document.getElementById("nav-blog-title");
-          const heroPill = document.getElementById("hero-blog-pill");
-          const heroTitleEl = document.getElementById("hero-blog-title");
-
-          setInterval(() => {
-            currentIndex = (currentIndex + 1) % topPosts.length;
-            const nextPost = topPosts[currentIndex];
-
-            if (pill && titleEl) {
-              titleEl.style.opacity = "0";
-              setTimeout(() => {
-                titleEl.textContent = nextPost.title;
-                pill.href = nextPost.url;
-                titleEl.style.opacity = "1";
-              }, 350);
-            }
-
-            if (heroPill && heroTitleEl) {
-              heroTitleEl.style.opacity = "0";
-              setTimeout(() => {
-                heroTitleEl.textContent = nextPost.title;
-                heroPill.href = nextPost.url;
-                heroTitleEl.style.opacity = "1";
-              }, 350);
-            }
-          }, 6000);
-        }
-      })();
-      </script>
-      {% endif %}
-
       <!-- Compute current active nav page -->
       {% set current_nav = namespace(name='Home') %}
       {% for item in site.navigation %}
@@ -114,8 +52,12 @@ site.theme.default is defined else (site.theme if site.theme is defined else "dr
           {% endif %}
         {% endif %}
       {% endfor %}
-      {% if page and page.url is defined and (page.url.startswith('/posts') or page.url.startswith('/tags')) %}
-        {% set current_nav.name = 'Blog' %}
+      {% if page and page.url is defined %}
+        {% if page.url.startswith('/til') %}
+          {% set current_nav.name = 'TIL' %}
+        {% elif page.url.startswith('/posts') or page.url.startswith('/tags') %}
+          {% set current_nav.name = 'Blog' %}
+        {% endif %}
       {% endif %}
 
       <!-- Right on Desktop: Standard horizontal links -->

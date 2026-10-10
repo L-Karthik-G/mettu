@@ -206,6 +206,19 @@ const py_build_plugin = () => {
 
       build();
 
+      server.middlewares.use((req, res, next) => {
+        if (req.method === 'GET' && req.url && !req.url.includes('.') && !req.url.endsWith('/')) {
+          const cleanUrl = req.url.split('?')[0];
+          const dirPath = path.join(__dirname, cleanUrl);
+          if (fs.existsSync(dirPath) && fs.statSync(dirPath).isDirectory()) {
+            const search = req.url.includes('?') ? '?' + req.url.split('?')[1] : '';
+            res.writeHead(301, { Location: cleanUrl + '/' + search });
+            return res.end();
+          }
+        }
+        next();
+      });
+
       server.watcher.on('all', async (event, filePath) => {
         if (!ready) {
           return;
@@ -220,7 +233,8 @@ const py_build_plugin = () => {
 
         if (filePath.includes('/content/') || filePath.includes('/templates/')) {
           if (event === 'change') {
-            const buildTarget = filePath.includes('/templates/') ? null : filePath;
+            const isCollectionFile = filePath.includes('/content/posts/') || filePath.includes('/content/til/') || filePath.includes('/templates/');
+            const buildTarget = isCollectionFile ? null : filePath;
             build(buildTarget);
           } else if (event === 'add' || event === 'unlink') {
             build();
@@ -310,6 +324,7 @@ export default defineConfig(async ({ command }) => {
           '**/blog/**',
           '**/posts/**',
           '**/tags/**',
+          '**/til/**',
         ],
       },
     },

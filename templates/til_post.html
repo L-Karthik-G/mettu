@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto w-full min-w-0">
+
+  <!-- Back button to TIL -->
+  <div class="mb-4">
+    <a href="/til/" class="inline-flex items-center gap-1.5 text-sm font-semibold text-gray-400 hover:text-blue-400 transition-colors group">
+      <span class="transition-transform group-hover:-translate-x-1">←</span>
+      <span>Back to TIL</span>
+    </a>
+  </div>
+
+  <div class="bg-black/25 
+              backdrop-blur-sm
+              border border-blue-500/20
+              rounded-2xl 
+              p-4 sm:p-8 md:p-12 
+              shadow-2xl
+              min-w-0
+              max-w-full
+              overflow-hidden">
+
+    <article class="prose prose-invert max-w-none min-w-0 w-full
+                prose-p:text-gray-200
+                prose-headings:text-white
+                prose-strong:text-white
+                prose-a:text-blue-400
+                prose-hr:border-neutral-800">
+
+      <header>
+        <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+          },
+          svg: {
+            fontCache: 'global'
+          }
+        };
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+        <!-- Topic indicator -->
+        {% if page.topic or page.category %}
+        <div class="mb-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-400">
+            #{{ page.topic or page.category }}
+          </span>
+        </div>
+        {% endif %}
+
+        <h1 class="mb-3 text-3xl md:text-4xl font-semibold tracking-tight text-white">
+          {{ page.title }}
+        </h1>
+
+        <div class="flex items-center gap-3 text-sm text-gray-400 flex-wrap">
+          {% if page.date %}
+          <span>Published on: {{ page.date }}</span>
+          {% endif %}
+          {% if page.reading_time %}
+          <span>·</span>
+          <span>{{ page.reading_time }}</span>
+          {% endif %}
+        </div>
+
+        {% if page.tags %}
+        <div class="mt-4 flex flex-wrap gap-2">
+          {% for tag in page.tags %}
+          <span class="badge badge-outline badge-sm border-neutral-600 text-gray-300">
+            {{ tag }}
+          </span>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <hr class="my-6 border-neutral-800">
+      </header>
+
+      {{ content | safe }}
+
+    </article>
+
+  </div>
+
+</div>
+
+<script>
+(() => {
+  document.querySelectorAll(".prose table").forEach((table) => {
+    if (!table.parentElement.classList.contains("table-wrapper")) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "table-wrapper my-6 w-full max-w-full overflow-x-auto rounded-xl border border-white/10 bg-black/40 p-3 shadow-inner";
+      table.parentNode.insertBefore(wrapper, table);
+      wrapper.appendChild(table);
+    }
+  });
+})();
+</script>
+
+{% endblock %}
