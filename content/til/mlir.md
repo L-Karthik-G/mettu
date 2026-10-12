@@ -15,11 +15,12 @@ Before we get into intimidating sounding stuff let’s talk about compilers in g
 
 Other languages like *Rust* or *Swift* also use their own IR versions but it’s not as optimised as lower level representation systems
 
-All of the ablove mentioned representation systems are single-level representations. **"So what could a multilevel representation do better?"**
+All of the ablove mentioned representation systems are single-level representations. A  "one size fits all" approach .**"So what could a multilevel representation do better?"**
 
 ### MLIR
 
 MLIR which works by extraction in multiple levels hence the name, works on a principle of **"progressive lowering"** by extracting at multiple levels it allows fine-tuning and optimisation at each level although it’s not nesseccary but it’s a nice choice to have. This helps compilation from program code to hardware representation hence  the "progressive lowering".
+
 
 
 ## MLIR in Quantam Compiling!!
@@ -34,7 +35,9 @@ This part is more technically but is relevant to my application .
 
 In MQT-CC , MLIR is especially usefull because of its **dialects**. dialects are specialised set operations which can be applied at different layers for layerwise optimisation and compilation as mentioned before (if youb payed attention)
 
-its dialects consist of:
+While LLVM excels at low-level optimizations, it lacks mechanisms for representing higher-level program structure or domain-specific semantics. The MLIR framework extends LLVM by introducing a multi-level approach that supports multiple abstraction layers within one infrastructure.
+
+MLIR's dialects consist of:
 
 - QC (helps intereact with normal user-level languages)
 - QCO (used for quantum program optimisations)
